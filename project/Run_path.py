@@ -20,7 +20,7 @@ left_sens = ColorSensor(Port.S3)
 ultra_sens = UltrasonicSensor(Port.S4)
 turn_sens = 30
 run_rate = 200
-#spkr = Sound()
+# spkr = Sound()
 robot = DriveBase(left_wheel, right_wheel, wheel_diameter = 56, axle_track = 118)
 
 # Write your program here.
