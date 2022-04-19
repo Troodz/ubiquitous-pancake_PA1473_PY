@@ -1,4 +1,4 @@
-# -- Replace with the name of your project --
+# Warehouse Robot
 
 ## Members of the group
 
