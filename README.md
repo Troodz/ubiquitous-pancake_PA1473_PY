@@ -2,7 +2,7 @@
 
 ## Members of the group
 
-* Arthur Bitenbinders arbi21@student.bth.se
+* Arturs Bitenbinders arbi21@student.bth.se
 * David Gulin dagu21@student.bth.se
 * Miran Ismail miim21@student.bth.se
 * Samuel Lindén salo21@student.bth.se
