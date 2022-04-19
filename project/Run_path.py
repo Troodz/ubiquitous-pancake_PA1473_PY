@@ -21,7 +21,9 @@ ultra_sens = UltrasonicSensor(Port.S4)
 turn_sens = 30
 run_rate = 200
 #spkr = Sound()
-robot = DriveBase(left_wheel, right_wheel, wheel_diameter = 56, axle_track = 118)
+positive_direction = Direction.COUNTERCLOCKWISE
+gears = [12, 36]
+robot = DriveBase(left_wheel, right_wheel, wheel_diameter = 47, axle_track = 128)
 
 # Write your program here.
     # ------------ Uppg2
