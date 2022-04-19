@@ -8,7 +8,13 @@ from pybricks.tools import wait, StopWatch, DataLog
 from pybricks.robotics import DriveBase
 from pybricks.media.ev3dev import SoundFile, ImageFile
 
-import Run_path, lift
+import lift
+
+
+DISTANCE_THRESHOLD = 140
+REFLECTION_THRESHOLD = 20
+DRIVE_SPEED = 50
+TURN_SPEED = 40
 
 
 def main():
@@ -17,38 +23,28 @@ def main():
     right_wheel = Motor(Port.C)
     left_sens = ColorSensor(Port.S3)
     ultra_sens = UltrasonicSensor(Port.S4)
-    lift = Motor(Port.A)
+    lift_motor = Motor(Port.A)
 
-    drivebase = DriveBase(left_wheel, right_wheel, wheel_diameter = 47, axle_track = 128)
+    drivebase = DriveBase(left_wheel, right_wheel,
+                          wheel_diameter=47, axle_track=128)
 
-    # This program requires LEGO EV3 MicroPython v2.0 or higher.
-    # Click "Open user guide" on the EV3 extension tab for more information.
-
-
-    # Create your objects here.
-    ev3 = EV3Brick()
-    # RÖR EJ OVAN
-
-    # Write your program here.
-    ev3.speaker.beep()
-
+    # Heart beat - robot is alive.
     wait(100)
-
     ev3.speaker.beep()
 
+    # Revise - infinite while loops are *illegal*
     while True:
-        #Run_path.follow_path()
-        if left_sens.reflection() < 20:
-            drivebase.drive(-50, 40)
-        else:
-            drivebase.drive(-50, -40)
+        if ultra_sens.distance() > DISTANCE_THRESHOLD:
+            if left_sens.reflection() < REFLECTION_THRESHOLD:
+                drivebase.drive(-DRIVE_SPEED, TURN_SPEED)
+            else:
+                drivebase.drive(-DRIVE_SPEED, -TURN_SPEED)
 
-    lift.lift(robotDB, lift_motor, 0)
+    # lift functionality
+    lift.lift(drivebase, lift_motor, 0)
 
-    # RÖR EJ
-    wait(10000)
-    ev3.speaker.beep()
     return 0
+
 
 if __name__ == '__main__':
     sys.exit(main())

@@ -20,46 +20,47 @@ left_sens = ColorSensor(Port.S3)
 ultra_sens = UltrasonicSensor(Port.S4)
 turn_sens = 30
 run_rate = 200
-<<<<<<< HEAD
 #spkr = Sound()
 positive_direction = Direction.COUNTERCLOCKWISE
 gears = [12, 36]
-robot = DriveBase(left_wheel, right_wheel, wheel_diameter = 47, axle_track = 128)
-=======
-# spkr = Sound()
-robot = DriveBase(left_wheel, right_wheel, wheel_diameter = 56, axle_track = 118)
->>>>>>> 2cb5089ca56cfb506e3720a5e25230b711c5bc27
+robot = DriveBase(left_wheel, right_wheel, wheel_diameter=47, axle_track=128)
 
 # Write your program here.
-    # ------------ Uppg2
+# ------------ Uppg2
+
+
 def go_robot_go(i):
     left_wheel.run(200*i)
     right_wheel.run(200*i)
+
 
 def run_run_left():
     right_wheel.run(150)
     left_wheel.run(40)
 
+
 def run_run_right():
     left_wheel.run(150)
     right_wheel.run(40)
+
 
 def whole_turn(i):
     left_wheel.run(-200*i)
     right_wheel.run(200*i)
 
+
 def stop():
     left_wheel.run(0)
     right_wheel.run(0)
 
+
 while True:
-    # Testar ifall något är ivägen 
-    if ultra_sens.distance() < 140.0: # Något ivägen
+    # Testar ifall något är ivägen
+    if ultra_sens.distance() < 140.0:  # Något ivägen
         counter = 0
         print("Oh nej, något är ivägen")
         stop()
-        ev3.speaker.say("Obsticle is in the way")
-    else: # Inget ivägen
+    else:  # Inget ivägen
         if left_sens.reflection() > turn_sens:
             if left_sens.reflection() > 20 and left_sens.reflection() < 30:
                 go_robot_go(1)
@@ -67,5 +68,3 @@ while True:
                 run_run_right()
             elif left_sens.reflection() > 30:
                 run_run_left()
-                
-

@@ -1,15 +1,17 @@
 # -- Replace with the name of your project --
 
 ## Members of the group
--- Replace with student information --
-* Adam Svensson adv@bth.se
-* Albin Persson alo@bth.se
+
+* Arthur Bitenbinders arbi21@student.bth.se
+* David Gulin dagu21@student.bth.se
+* Miran Ismail miim21@student.bth.se
+* Samuel Lindén salo21@student.bth.se
+* Simon Ljung silj20@student.bth.se
 
 ## Project Description
--- Place a short description of the project so that the reader know what the goal of the repository is --
+
+Development project for a robot using the SCRUM framework.
 
 ## User stories
--- Extend the list with user stories. Also use the marking method for complete and incomplete user stories --
 
-- [ ] This is a user story the is incomplete 
-- [X] This is a user story that is complete
+- [ ] Fill the user stories secion with user stories
