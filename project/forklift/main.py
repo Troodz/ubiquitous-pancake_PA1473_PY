@@ -80,3 +80,4 @@ if __name__ == "__main__":
         if instructions == False:
             paralysed()
             instruction_list = get_instructions()
+            print("Hello")
