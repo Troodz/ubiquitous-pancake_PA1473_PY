@@ -3,10 +3,12 @@
 ## Members of the group
 -- Replace with student information --
 * Kristoffer Wessling krae21@studen.bth.se
-* Jeet 
+* Jeet Purohitjeet Purohit jepu20@student.bth.se
+* Amanda Björk ambj21@studen.bth.se
+* Nicholas Joseph Hughes nihu21@student.bth.se
 
 ## Project Description
--- Place a short description of the project so that the reader know what the goal of the repository is --
+-- Create and design a robot forklift which could navigate and work in a facility.
 
 ## User stories
 -- Extend the list with user stories. Also use the marking method for complete and incomplete user stories --
