@@ -10,7 +10,6 @@
 -- Create and design a robot forklift which could navigate and work in a facility.
 
 ## User stories
--- Extend the list with user stories. Also use the marking method for complete and incomplete user stories --
 - [ ] Have a truck pick up an item from an elevated surface
 - [ ] Have a truck recognize that the picking-up of an item failed
 - [ ] Have a truck recognize a misplaced item
