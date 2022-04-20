@@ -1,121 +1,82 @@
 #!/usr/bin/env pybricks-micropython
-
+#Libaries
+#EV3
 from pybricks.ev3devices import Motor, ColorSensor, UltrasonicSensor
 from pybricks.parameters import Port, Direction, Button
 from pybricks.tools import wait
 from pybricks.hubs import EV3Brick
 from pybricks.robotics import DriveBase
+#Python
 
-
-
+#Definitons
 left_motor = Motor(Port.C)#kan vara omvänt
 right_motor = Motor(Port.B)#ingen aning faktiskt vilken port som är vad jag hittar bara på
 forklift = Motor(Port.A, positive_direction=Direction.CLOCKWISE, gears=[12, 20])
 line_sensor = ColorSensor(Port.S3)
 cruise_sensor = UltrasonicSensor(Port.S4)
 robot = DriveBase(left_motor, right_motor, wheel_diameter=47, axle_track=128)
-
+#Variables
 stopping_distance = 150
+working_speed = 25
+move_speed = -50
 
-# def drive():
-
-#     BLACK = 9
-#     WHITE = 85
-#     threshold = (BLACK + WHITE) / 2
-
-#     DRIVE_SPEED = 100
-
-#     PROPORTIONAL_GAIN = 1.2
-#     right_motor.dc(-50)
-#     left_motor.dc(-50)
-#     while True:
-
-#         if line_sensor().reflection >80:
-#             left_motor(-50)
-#             right_motor(25)
-#         else:
-#             left_motor(-50)
-#             right_motor(25)
-        # # Calculate the deviation from the threshold.
-        # deviation = line_sensor.reflection() - threshold
-
-        # # Calculate the turn rate.
-        # turn_rate = PROPORTIONAL_GAIN * deviation
-
-        # # Set the drive base speed and turn rate.
-        # robot.drive(DRIVE_SPEED, turn_rate)
-
-        # You can wait for a short time or do other things in this loop.
-        # right_motor.dc(-50)
-        # left_motor.dc(-50)
-        #robot.drive(50, 0)
-        #print(line_sensor.color())
-        #print(cruise_sensor.distance())
+def lift(up_down):
+    ev3.light.on(Color.YELLOW)
+    while(True):
+        forklift.run_until_stalled(working_speed*up_down, then=Stop.COAST, duty_limit=None)
+    return True
 
 
-# def lift():
-#     while(True):
-#         forklift.run_until_stalled(speed, then=Stop.COAST, duty_limit=None)
+def follow_line(line_color, forklift):
+    '''This function will make the robot follow a selected line color'''
+    current_line = line_sensor.color()
+    if current_line != line_color:
+        right_motor.dc(-50)
+        left_motor.dc(25)
+        wait(15)
 
-def drive():
-    ev3 = EV3Brick()
-    while True:
+    else:
+        left_motor.dc(-50)
+        right_motor.dc(25)
+        wait(15)
 
-        print(line_sensor.ambient())
-        if line_sensor.ambient() > 4:
-            right_motor.dc(-50)
-            left_motor.dc(25)
-            wait(15)
-
-        else:
-            left_motor.dc(-50)
-            right_motor.dc(25)
-            wait(15)
         left_motor.dc(-50)
         right_motor.dc(-50)
 
-        if Button.DOWN in ev3.buttons.pressed():
+    return current_line
+
+def user_controll()
+    '''This functions waits for the user to make a active decision regarding somthing the robot can't'''
+     ev3.light.on(Color.BLUE)
+    while not Button.DOWN in ev3.buttons.pressed():
             left_motor.dc(0)
             right_motor.dc(0)
+    ev3.light.on(Color.GREEN)
+    return True
 
-            wait(5000)
-    #robot.drive(-50, 25)
+def obstacle_distance():
+    return cruise_sensor.distance()
 
+def avoid_collison(robot):
+    robot.stop()
+    left_motor.dc(0)
+    right_motor.dc(0)
+    while obstacle_distance() < stopping_distance:
+        wait(10)
+        ev3.light.on(Color.RED)
+    ev3.light.on(Color.GREEN)
 
+def paralysed(robot):
+    robot.stop()
+    left_motor.dc(0)
+    right_motor.dc(0)
+def get_instructions()
 
-
-drive()
-
-
-# def brown():
-
-# def red():
-
-# def blue():
-
-# def green():
-
-#main()
-# while(True):
-#     obstacel_distance = cruise_sensor.distance()
-#     current_line = line_sensor.color()
-
-#     if obstacle_distance < stopping_distance:
-
-#         drive()
-#         if(current_line == color.yellow)
-#             break
-
-#         elif current_line = color.brown:
-#             brown()
-
-#         elif current_line = color.red:
-#             red()
-
-#         elif current_line = color.blue:
-#             blue()
-
-#         elif current_line = color.green:
-#             green()
-#     else:
-#         wait(5)
+if __name__ == "__main__":
+    ev3 = EV3Brick()
+    while(run_statement)):
+        if obstacle_distance() < stopping_distance:
+            avoid_collison(ev3)
+        if instructions == False:
+            paralysed()
+            instruction_list = get_instructions()
