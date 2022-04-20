@@ -7,7 +7,7 @@
 * Nicholas Joseph Hughes nihu21@student.bth.se
 
 ## Project Description
--- Create and design a robot forklift which could navigate and work in a facility.
+Create and design a robot forklift which could navigate and work in a facility.
 
 ## User stories
 - [ ] Have a truck pick up an item from an elevated surface
