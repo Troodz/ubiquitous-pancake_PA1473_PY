@@ -1,7 +1,6 @@
 # -- Replace with the name of your project --
 
 ## Members of the group
--- Replace with student information --
 * Kristoffer Wessling krae21@studen.bth.se
 * Jeet Purohitjeet Purohit jepu20@student.bth.se
 * Amanda Björk ambj21@studen.bth.se
