@@ -27,7 +27,8 @@ ev3 = EV3Brick()
 def lift(up_down):
     ev3.light.on(Color.YELLOW)
     while(True):
-        forklift.run_until_stalled(working_speed*up_down, then=Stop.COAST, duty_limit=None)
+        #forklift.run_until_stalled(working_speed*up_down, then=Stop.COAST, duty_limit=None)
+        forklift.run_angle(working_speed*up_down, 60, then=Stop.HOLD, wait=True)
     return True
 
 # def lift_until_pressed(touch_sensor):
