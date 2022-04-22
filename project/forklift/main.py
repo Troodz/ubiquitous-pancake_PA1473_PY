@@ -19,7 +19,8 @@ robot = DriveBase(left_motor, right_motor, wheel_diameter=47, axle_track=128)
 stopping_distance = 150
 working_speed = 25
 move_speed = -50
-
+run_statement = True
+instructions = True
 def lift(up_down):
     ev3.light.on(Color.YELLOW)
     while(True):
@@ -45,9 +46,9 @@ def follow_line(line_color, forklift):
 
     return current_line
 
-def user_controll()
+def user_controll():
     '''This functions waits for the user to make a active decision regarding somthing the robot can't'''
-     ev3.light.on(Color.BLUE)
+    ev3.light.on(Color.BLUE)
     while not Button.DOWN in ev3.buttons.pressed():
             left_motor.dc(0)
             right_motor.dc(0)
@@ -70,11 +71,14 @@ def paralysed(robot):
     robot.stop()
     left_motor.dc(0)
     right_motor.dc(0)
-def get_instructions()
+def get_instructions():
+    '''hhf'''
 
 if __name__ == "__main__":
     ev3 = EV3Brick()
-    while(run_statement)):
+    left_motor.dc(-50)
+    right_motor.dc(-50)
+    while(run_statement):
         if obstacle_distance() < stopping_distance:
             avoid_collison(ev3)
         if instructions == False:
