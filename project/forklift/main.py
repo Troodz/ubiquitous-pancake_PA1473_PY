@@ -91,8 +91,9 @@ def get_instructions():
     '''hhf'''
 
 if __name__ == "__main__":
-   objective_line = Color.Red
-   current_line = None
+    objective_line = Color.RED
+    current_line = None
+    color_to_follow = Color.BLUE
     while(run_statement):
         if obstacle_distance() < stopping_distance:
             avoid_collison(ev3)
@@ -101,4 +102,6 @@ if __name__ == "__main__":
             paralysed()
             instruction_list = get_instructions()
         else:
-           current_line = follow_line(Color.BLUE, robot)
+            current_line = follow_line(color_to_follow)
+            if current_line == objective_line:
+                color_to_follow = objective_line
