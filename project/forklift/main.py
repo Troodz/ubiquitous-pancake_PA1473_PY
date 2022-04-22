@@ -2,7 +2,7 @@
 #Libaries
 #EV3
 from pybricks.ev3devices import Motor, ColorSensor, UltrasonicSensor
-from pybricks.parameters import Port, Direction, Button
+from pybricks.parameters import Port, Direction, Button, Color, Stop
 from pybricks.tools import wait
 from pybricks.hubs import EV3Brick
 from pybricks.robotics import DriveBase
@@ -21,7 +21,8 @@ working_speed = 25
 move_speed = -50
 run_statement = True
 instructions = True
- ev3 = EV3Brick()
+ev3 = EV3Brick()
+
 def lift(up_down):
     ev3.light.on(Color.YELLOW)
     while(True):
@@ -63,9 +64,10 @@ def avoid_collison(robot):
     #robot.stop()
     left_motor.dc(0)
     right_motor.dc(0)
+    ev3.light.on(Color.RED)
     while obstacle_distance() < stopping_distance:
         wait(10)
-        ev3.light.on(Color.RED)
+
     ev3.light.on(Color.GREEN)
 
 def paralysed(robot):
@@ -77,8 +79,9 @@ def get_instructions():
 
 if __name__ == "__main__":
 
-    left_motor.dc(-50)
-    right_motor.dc(-50)
+    #left_motor.dc(-50)
+    #right_motor.dc(-50)
+    lift(1)
     while(run_statement):
         if obstacle_distance() < stopping_distance:
             avoid_collison(ev3)
