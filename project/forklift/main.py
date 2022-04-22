@@ -15,6 +15,7 @@ forklift = Motor(Port.A, positive_direction=Direction.CLOCKWISE, gears=[12, 20])
 line_sensor = ColorSensor(Port.S3)
 cruise_sensor = UltrasonicSensor(Port.S4)
 robot = DriveBase(left_motor, right_motor, wheel_diameter=47, axle_track=128)
+touch_sensor = TouchSensor(Port.S1)
 #Variables
 stopping_distance = 150
 working_speed = 25
@@ -26,6 +27,11 @@ def lift(up_down):
     while(True):
         forklift.run_until_stalled(working_speed*up_down, then=Stop.COAST, duty_limit=None)
     return True
+
+# def lift_until_pressed(touch_sensor):
+#     touch_sensor.pressed()
+#     while(False):
+
 
 
 def follow_line(line_color, forklift):
