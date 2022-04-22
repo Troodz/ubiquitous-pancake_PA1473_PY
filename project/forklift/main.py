@@ -21,6 +21,7 @@ working_speed = 25
 move_speed = -50
 run_statement = True
 instructions = True
+ ev3 = EV3Brick()
 def lift(up_down):
     ev3.light.on(Color.YELLOW)
     while(True):
@@ -59,7 +60,7 @@ def obstacle_distance():
     return cruise_sensor.distance()
 
 def avoid_collison(robot):
-    robot.stop()
+    #robot.stop()
     left_motor.dc(0)
     right_motor.dc(0)
     while obstacle_distance() < stopping_distance:
@@ -68,14 +69,14 @@ def avoid_collison(robot):
     ev3.light.on(Color.GREEN)
 
 def paralysed(robot):
-    robot.stop()
+    #robot.stop()
     left_motor.dc(0)
     right_motor.dc(0)
 def get_instructions():
     '''hhf'''
 
 if __name__ == "__main__":
-    ev3 = EV3Brick()
+
     left_motor.dc(-50)
     right_motor.dc(-50)
     while(run_statement):
