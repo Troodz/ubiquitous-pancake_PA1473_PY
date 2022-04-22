@@ -1,7 +1,7 @@
 #!/usr/bin/env pybricks-micropython
 #Libaries
 #EV3
-from pybricks.ev3devices import Motor, ColorSensor, UltrasonicSensor
+from pybricks.ev3devices import Motor, ColorSensor, UltrasonicSensor, TouchSensor
 from pybricks.parameters import Port, Direction, Button, Color, Stop
 from pybricks.tools import wait
 from pybricks.hubs import EV3Brick
@@ -18,7 +18,7 @@ robot = DriveBase(left_motor, right_motor, wheel_diameter=47, axle_track=128)
 touch_sensor = TouchSensor(Port.S1)
 #Variables
 stopping_distance = 150
-working_speed = 25
+working_speed = 50
 move_speed = -50
 run_statement = True
 instructions = True
