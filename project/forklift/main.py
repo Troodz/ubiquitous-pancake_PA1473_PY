@@ -18,7 +18,7 @@ robot = DriveBase(left_motor, right_motor, wheel_diameter=47, axle_track=128)
 touch_sensor = TouchSensor(Port.S1)
 #Variables
 stopping_distance = 150
-working_speed = 50
+working_speed = 100
 move_speed = -50
 run_statement = True
 instructions = True
@@ -26,9 +26,8 @@ ev3 = EV3Brick()
 
 def lift(up_down):
     ev3.light.on(Color.YELLOW)
-    while(True):
-        #forklift.run_until_stalled(working_speed*up_down, then=Stop.COAST, duty_limit=None)
-        forklift.run_angle(working_speed*up_down, 60, then=Stop.HOLD, wait=True)
+    forklift.run_until_stalled(working_speed*up_down, then=Stop.HOLD, duty_limit=None)
+    ev3.light.on(Color.GREEN)
     return True
 
 # def lift_until_pressed(touch_sensor):
@@ -89,10 +88,12 @@ if __name__ == "__main__":
     #left_motor.dc(-50)
     #right_motor.dc(-50)
     lift(1)
+    wait(2000)
+    #lift(-1)
     while(run_statement):
         if obstacle_distance() < stopping_distance:
             avoid_collison(ev3)
+            pass
         if instructions == False:
             paralysed()
             instruction_list = get_instructions()
-ll
