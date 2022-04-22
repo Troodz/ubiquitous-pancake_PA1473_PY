@@ -43,7 +43,7 @@ def lift_until_pressed():
 
 
 
-def follow_line(line_color, forklift):
+def follow_line(line_color):
     '''This function will make the robot follow a selected line color'''
     current_line = line_sensor.color()
     if current_line != line_color:
@@ -91,13 +91,8 @@ def get_instructions():
     '''hhf'''
 
 if __name__ == "__main__":
-
-    #left_motor.dc(-50)
-    #right_motor.dc(-50)
-    #lift(1)
-    #wait(2000)
-    #lift(-1, 0)
-    #lift_until_pressed()
+   objective_line = Color.Red
+   current_line = None
     while(run_statement):
         if obstacle_distance() < stopping_distance:
             avoid_collison(ev3)
@@ -106,4 +101,4 @@ if __name__ == "__main__":
             paralysed()
             instruction_list = get_instructions()
         else:
-            follow_line(Color.BLUE, robot)
+           current_line = follow_line(Color.BLUE, robot)
