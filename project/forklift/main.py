@@ -17,25 +17,29 @@ cruise_sensor = UltrasonicSensor(Port.S4)
 robot = DriveBase(left_motor, right_motor, wheel_diameter=47, axle_track=128)
 touch_sensor = TouchSensor(Port.S1)
 #Variables
-stopping_distance = 150
+stopping_distance = 300
 working_speed = 100
 move_speed = -50
 run_statement = True
 instructions = True
 ev3 = EV3Brick()
 
-def lift(up_down):
+def lift(up_down, angle):
     ev3.light.on(Color.YELLOW)
-    forklift.run_until_stalled(working_speed*up_down, then=Stop.HOLD, duty_limit=None)
+    #forklift.run_until_stalled(working_speed*up_down, then=Stop.HOLD, duty_limit=None)
+    forklift.run_angle(working_speed*up_down, angle, then=Stop.HOLD, wait=True)
     ev3.light.on(Color.GREEN)
     return True
 
-def lift_until_pressed(touch_sensor, left_motor, right_motor):
+def lift_until_pressed():
     right_motor.dc(-50)
-    left_motor.dc(50)
-    touch_sensor.pressed()
-    while(True):
-        lift(1)
+    left_motor.dc(-50)
+    while(not touch_sensor.pressed()):
+        wait(10)
+    right_motor.dc(0)
+    left_motor.dc(0)
+    lift(1, 40)
+
 
 
 
@@ -90,9 +94,10 @@ if __name__ == "__main__":
 
     #left_motor.dc(-50)
     #right_motor.dc(-50)
-    lift(1)
-    wait(2000)
-    #lift(-1)
+    #lift(1)
+    #wait(2000)
+    #lift(-1, 0)
+    #lift_until_pressed()
     while(run_statement):
         if obstacle_distance() < stopping_distance:
             avoid_collison(ev3)
@@ -100,3 +105,5 @@ if __name__ == "__main__":
         if instructions == False:
             paralysed()
             instruction_list = get_instructions()
+        else:
+            follow_line(Color.BLUE, robot)
