@@ -41,7 +41,7 @@ def lift_until_pressed():
     lift(1, 40)
 
 def elevated_surface():
-    forklift.run_until_stalled(working_speed*up_down, then=Hold.COAST, duty_limit=None)
+    forklift.run_until_stalled(working_speed*up_down, then=Stop.HOLD, duty_limit=None)
     left_motor.dc(50)
     while(not touch_sensor.pressed()):
         wait (10)
