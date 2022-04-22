@@ -30,9 +30,12 @@ def lift(up_down):
         forklift.run_until_stalled(working_speed*up_down, then=Stop.COAST, duty_limit=None)
     return True
 
-# def lift_until_pressed(touch_sensor):
-#     touch_sensor.pressed()
-#     while(False):
+def lift_until_pressed(touch_sensor, left_motor, right_motor):
+    right_motor.dc(-50)
+    left_motor.dc(50)
+    touch_sensor.pressed()
+    while(True):
+        lift(1)
 
 
 
