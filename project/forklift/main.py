@@ -40,8 +40,14 @@ def lift_until_pressed():
     left_motor.dc(0)
     lift(1, 40)
 
-
-
+def elevated_surface():
+    forklift.run_until_stalled(working_speed*up_down, then=Stop.HOLD, duty_limit=None)
+    left_motor.dc(50)
+    while(not touch_sensor.pressed()):
+        wait (10)
+    right_motor.dc(0)
+    left_motor.dc(0)
+    lift(-1, 40)
 
 def follow_line(line_color):
     '''This function will make the robot follow a selected line color'''
