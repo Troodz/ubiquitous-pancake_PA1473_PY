@@ -1,4 +1,4 @@
-# -- Replace with the name of your project --
+# Project Forklift
 
 ## Members of the group
 * Kristoffer Wessling krae21@studen.bth.se
