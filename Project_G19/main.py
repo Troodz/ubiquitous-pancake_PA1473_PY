@@ -36,6 +36,5 @@ wait(100)
 ev3.speaker.beep()
 # roboten startar
 
-
 lift.lift(drivebase, lift_motor, touch_sensor)
 
