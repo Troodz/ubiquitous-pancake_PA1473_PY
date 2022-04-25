@@ -1,4 +1,7 @@
 
+from pybricks.ev3devices import (Motor, TouchSensor, ColorSensor,
+                                 InfraredSensor, UltrasonicSensor, GyroSensor)
+from pybricks.tools import wait, StopWatch, DataLog
 
 def follow_path(drivebase, left_sens):
     if left_sens.reflection() < 20:
@@ -10,22 +13,6 @@ def obstical_check(drivebase, ultra_sens, ev3):
     if ultra_sens.distance() < 200:
         drivebase.drive(0, 0)
         ev3.speaker.say("Obstical detected")
-
-
-
-from asyncio.windows_events import NULL
-import sys
-from pybricks.hubs import EV3Brick
-from pybricks.ev3devices import (Motor, TouchSensor, ColorSensor,
-                                 InfraredSensor, UltrasonicSensor, GyroSensor)
-from pybricks.parameters import Port, Stop, Direction, Button, Color
-from pybricks.tools import wait, StopWatch, DataLog
-from pybricks.robotics import DriveBase
-from pybricks.media.ev3dev import SoundFile, ImageFile
-
-import lift
-
-
 
 def multiple_paths(drivebase, ultra_sens, ev3, left_sens):
 
