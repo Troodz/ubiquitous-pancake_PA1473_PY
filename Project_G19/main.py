@@ -38,6 +38,7 @@ ev3.speaker.beep()
 
 #lift.lift(drivebase, lift_motor, touch_sensor)
 
+"""
 lift_motor.run(100)
 time = StopWatch()
 time.reset()
@@ -46,7 +47,7 @@ while time.time() < 4000:
 lift_motor.run(0)
 
 lift.lift(drivebase, lift_motor, touch_sensor)
-
+"""
 
 Follow_path.multiple_paths(drivebase, ultra_sens, ev3, left_sens)
 #while True:
