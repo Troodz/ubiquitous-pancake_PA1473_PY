@@ -7,6 +7,6 @@ def follow_path(drivebase, left_sens):
         drivebase.drive(-50, -40)
 
 def obstical_check(drivebase, ultra_sens, ev3):
-    if ultra_sens < 400:
+    if ultra_sens.distance() < 200:
         drivebase.drive(0, 0)
-        ev3.speak.say("Obstical detected")
+        ev3.speaker.say("Obstical detected")

@@ -19,7 +19,7 @@ ev3.speaker.beep()
 #############################################################
 
 # Våra importer
-import lift
+import lift, Follow_path
 
 ev3 = EV3Brick()
 left_wheel = Motor(Port.B)
@@ -36,5 +36,9 @@ wait(100)
 ev3.speaker.beep()
 # roboten startar
 
-lift.lift(drivebase, lift_motor, touch_sensor)
+#lift.lift(drivebase, lift_motor, touch_sensor)
+
+while True:
+    Follow_path.obstical_check(drivebase, ultra_sens, ev3)
+    Follow_path.follow_path(drivebase, left_sens)
 
