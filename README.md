@@ -13,8 +13,8 @@ Create and design a robot forklift which could navigate and work in a facility.
 - [ ] Have a truck pick up an item from an elevated surface
 - [ ] Have a truck recognize that the picking-up of an item failed
 - [ ] Have a truck recognize a misplaced item
-- [ ] Have a truck pickup an item
-- [ ] Have a truck follow a specified path from multiple options
+- [X] Have a truck pickup an item
+- [X] Have a truck follow a specified path from multiple options
 
 
 - [ ] Abort the collection of a item
