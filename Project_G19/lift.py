@@ -1,24 +1,24 @@
-#!/usr/bin/env pybricks-micropython
 import sys
+
 from pybricks.ev3devices import Motor, TouchSensor
 from pybricks.tools import wait, StopWatch
 from pybricks.robotics import DriveBase
 
 
-def lift_fork(lift_motor: Motor):
+def lift_fork(lift_motor):
     lift_motor.run_angle(10, 180)
 
 
-def lower_lift_fork(lift_motor: Motor):
+def lower_lift_fork(lift_motor):
     lift_motor.run_angle(10, -180)
 
 
-def check_pallet(lift_motor: Motor):
+def check_pallet(lift_motor):
     if not has_pallet():
         lower_lift_fork(lift_motor)
 
 
-def lift_old(drive_base: DriveBase, lift_motor: Motor, height: int):
+def lift_old(drive_base: DriveBase, lift_motor, height: int):
     drive_base.drive(100, 0)
     time = StopWatch()
     time.reset()
@@ -35,7 +35,7 @@ def has_pallet(touch_sensor: TouchSensor):
     return touch_sensor.pressed()
 
 
-def lift(drive_base: DriveBase, lift_motor: Motor, height: int):
+def lift(drive_base: DriveBase, lift_motor, height: int):
     drive_base.drive(100, 0)
     time = StopWatch()
     time.reset()
