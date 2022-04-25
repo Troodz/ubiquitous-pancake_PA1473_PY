@@ -1,5 +1,5 @@
+#!/usr/bin/env pybricks-micropython
 import sys
-
 from pybricks.ev3devices import Motor, TouchSensor
 from pybricks.tools import wait, StopWatch
 from pybricks.robotics import DriveBase
