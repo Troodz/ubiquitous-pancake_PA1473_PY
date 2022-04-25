@@ -38,6 +38,16 @@ ev3.speaker.beep()
 
 #lift.lift(drivebase, lift_motor, touch_sensor)
 
+lift_motor.run(100)
+time = StopWatch()
+time.reset()
+while time.time() < 4000:
+    pass
+lift_motor.run(0)
+
+lift.lift(drivebase, lift_motor, touch_sensor)
+
+
 while True:
     Follow_path.obstical_check(drivebase, ultra_sens, ev3)
     Follow_path.follow_path(drivebase, left_sens)
