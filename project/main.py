@@ -1,4 +1,5 @@
 #!/usr/bin/env pybricks-micropython
+from asyncio.windows_events import NULL
 import sys
 from pybricks.hubs import EV3Brick
 from pybricks.ev3devices import (Motor, TouchSensor, ColorSensor,
@@ -29,16 +30,18 @@ def main():
                           wheel_diameter=47, axle_track=128)
 
     # Heart beat - robot is alive.
-    wait(100)
     ev3.speaker.beep()
+    lift.lift(drivebase, lift_motor, height=NULL)
+    # wait(100)
+    # ev3.speaker.beep()
 
-    # Revise - infinite while loops are *illegal*
-    while True:
-        if ultra_sens.distance() > DISTANCE_THRESHOLD:
-            if left_sens.reflection() < REFLECTION_THRESHOLD:
-                drivebase.drive(-DRIVE_SPEED, TURN_SPEED)
-            else:
-                drivebase.drive(-DRIVE_SPEED, -TURN_SPEED)
+    # # Revise - infinite while loops are *illegal*
+    # while True:
+    #     if ultra_sens.distance() > DISTANCE_THRESHOLD:
+    #         if left_sens.reflection() < REFLECTION_THRESHOLD:
+    #             drivebase.drive(-DRIVE_SPEED, TURN_SPEED)
+    #         else:
+    #             drivebase.drive(-DRIVE_SPEED, -TURN_SPEED)
 
     # lift functionality
     lift.lift(drivebase, lift_motor, 0)
