@@ -22,6 +22,9 @@ working_speed = 100
 move_speed = -50
 run_statement = True
 instructions = True
+circulation_color = Color.YELLOW
+Start_color = Color.GREEN
+color_list = [Color.RED, color_BLUE, Color.BROWN]
 ev3 = EV3Brick()
 
 def lift(up_down, angle):
@@ -79,7 +82,7 @@ def user_controll():
 def obstacle_distance():
     return cruise_sensor.distance()
 
-def avoid_collison(robot):
+def avoid_collison():
     #robot.stop()
     left_motor.dc(0)
     right_motor.dc(0)
@@ -89,25 +92,33 @@ def avoid_collison(robot):
 
     ev3.light.on(Color.GREEN)
 
-def paralysed(robot):
+def paralysed():
     #robot.stop()
     left_motor.dc(0)
     right_motor.dc(0)
 def get_instructions():
-    '''hhf'''
+    '''Getting instructions'''
+    return [Start_color, circulation_color, ]
 
 if __name__ == "__main__":
-    objective_line = Color.RED
+    #Variables in use
+    objective_line = None
     current_line = None
-    color_to_follow = Color.BLUE
+    color_to_follow = None
+    current_step = 0
     while(run_statement):
+        driving(instruction_list)
         if obstacle_distance() < stopping_distance:
-            avoid_collison(ev3)
+            avoid_collison()
             pass
         if instructions == False:
             paralysed()
             instruction_list = get_instructions()
         else:
-            current_line = follow_line(color_to_follow)
-            if current_line == objective_line:
-                color_to_follow = objective_line
+            current_line = follow_line(instruction_list[current_step])
+            if current_line == instruction_list[current_step+1]:
+                step = step + 1
+            elif step == len(instruction_list)
+                instruction_list.reverse()
+                step = 0
+            else:
