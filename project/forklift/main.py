@@ -11,7 +11,7 @@ from pybricks.robotics import DriveBase
 #Definitons
 left_motor = Motor(Port.C)#kan vara omvänt
 right_motor = Motor(Port.B)#ingen aning faktiskt vilken port som är vad jag hittar bara på
-forklift = Motor(Port.A, positive_direction=Direction.CLOCKWISE, gears=[12, 20])
+forklift = Motor(Port.A, positive_direction=Direction.CLOCKWISE, gears=[12, 36])
 line_sensor = ColorSensor(Port.S3)
 cruise_sensor = UltrasonicSensor(Port.S4)
 robot = DriveBase(left_motor, right_motor, wheel_diameter=47, axle_track=128)
@@ -22,8 +22,8 @@ working_speed = 100
 move_speed = -50
 run_statement = True
 instructions = False
-circulation_color = Color.YELLOW
-Start_color = Color.GREEN
+circulation_color = Color.BLUE
+Start_color = Color.BLUE
 color_list = [Color.RED, Color.BLUE, Color.BROWN]
 ev3 = EV3Brick()
 
@@ -41,7 +41,7 @@ def lift_until_pressed():
         wait(10)
     right_motor.dc(0)
     left_motor.dc(0)
-    lift(1, 40)
+    lift(-1, 50)
 
 def elevated_surface():
     forklift.run_until_stalled(working_speed*up_down, then=Stop.HOLD, duty_limit=None)
@@ -98,17 +98,17 @@ def paralysed():
     right_motor.dc(0)
 def get_instructions():
     '''Getting instructions'''
-    return [Start_color, circulation_color, Color.BLUE]
+    return [Start_color, circulation_color, Color.RED]
 
 if __name__ == "__main__":
     #Variables in use
-    objective_line = None
-    current_line = None
-    color_to_follow = None
     current_step = 0
     instruction_list = []
-
+    #lift_until_pressed()
+    # left_motor.dc(-50)
+    # right_motor.dc(25)
     while(run_statement):
+
         #driving(instruction_list)
         if obstacle_distance() < stopping_distance:
             avoid_collison()
@@ -118,4 +118,10 @@ if __name__ == "__main__":
             instruction_list = get_instructions()
             instructions = True
         else:
-            current_color = follow_line(instruction_list[0])
+            current_color = follow_line(instruction_list[current_step])
+            if current_step + 1 > len(instruction_list):
+                current_step = 0
+                instruction_list.reverse()
+            elif current_color == instruction_list[current_step + 1]:
+                current_step = current_step + 1
+
