@@ -21,10 +21,10 @@ stopping_distance = 300
 working_speed = 100
 move_speed = -50
 run_statement = True
-instructions = True
+instructions = False
 circulation_color = Color.YELLOW
 Start_color = Color.GREEN
-color_list = [Color.RED, color_BLUE, Color.BROWN]
+color_list = [Color.RED, Color.BLUE, Color.BROWN]
 ev3 = EV3Brick()
 
 def lift(up_down, angle):
@@ -107,19 +107,15 @@ if __name__ == "__main__":
     color_to_follow = None
     current_step = 0
     instruction_list = []
+
     while(run_statement):
-        driving(instruction_list)
+        #driving(instruction_list)
         if obstacle_distance() < stopping_distance:
             avoid_collison()
             pass
         if instructions == False:
             paralysed()
             instruction_list = get_instructions()
+            instructions = True
         else:
-            current_line = follow_line(instruction_list[current_step])
-            if current_line == instruction_list[current_step+1]:
-                step = step + 1
-            elif step == len(instruction_list)
-                instruction_list.reverse()
-                step = 0
-            else:
+            current_color = follow_line(instruction_list[0])
