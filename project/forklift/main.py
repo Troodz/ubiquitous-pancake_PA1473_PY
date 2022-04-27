@@ -107,6 +107,7 @@ if __name__ == "__main__":
     #lift_until_pressed()
     # left_motor.dc(-50)
     # right_motor.dc(25)
+
     while(run_statement):
 
         #driving(instruction_list)
@@ -117,11 +118,12 @@ if __name__ == "__main__":
             paralysed()
             instruction_list = get_instructions()
             instructions = True
+
         else:
             current_color = follow_line(instruction_list[current_step])
-            if current_step + 1 > len(instruction_list):
-                current_step = 0
-                instruction_list.reverse()
-            elif current_color == instruction_list[current_step + 1]:
+            if current_color == instruction_list[current_step + 1]:
                 current_step = current_step + 1
-
+                if current_step == len(instruction_list)-1:
+                    current_step = 0
+                    print("hej")
+                    instruction_list.reverse()
