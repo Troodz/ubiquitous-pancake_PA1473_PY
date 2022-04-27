@@ -32,11 +32,11 @@ import lift
 #     pass
 # lift_motor.run(0)
 
-# lift.lift(drivebase, lift_motor, touch_sensor)
+lift.lift(drivebase, lift_motor, touch_sensor)
 
-print(lift_motor.angle())
-for i in range(5):
-    lift_motor.run_target(1000, 270)
-    wait(1000)
-    lift_motor.run_target(100, 90)
-    wait(1000)
+# print(lift_motor.angle())
+# for i in range(5):
+#     lift_motor.run_target(1000, 270)
+#     wait(1000)
+#     lift_motor.run_target(100, 90)
+#     wait(1000)

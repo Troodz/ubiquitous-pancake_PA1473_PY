@@ -10,10 +10,11 @@ def lift_fork(lift_motor):
 
 
 def lower_lift_fork(lift_motor):
-    lift_motor.run_target(100, 90)
+    lift_motor.run_target(100, 0)
 
 
 def check_pallet(lift_motor, touch_sensor):
+    print(has_pallet(touch_sensor))
     if not has_pallet(touch_sensor):
         lower_lift_fork(lift_motor)
 
@@ -35,10 +36,10 @@ def lift(drive_base: DriveBase, lift_motor: Motor, touch_sensor: TouchSensor, he
         lift_fork(lift_motor)
         check_pallet(lift_motor, touch_sensor) # kontrollerar om pallen fortfarande är kvar
         wait(500)
-    drive_base.drive(100, 0)
     time = StopWatch()
     time.reset()
-    while time.time() < backing_time: #Backar så långt som den körde fram
+    drive_base.drive(100, 0)
+    while time.time() < (backing_time-500): #Backar så långt som den körde fram
         pass
     drive_base.drive(0, 0)
 
