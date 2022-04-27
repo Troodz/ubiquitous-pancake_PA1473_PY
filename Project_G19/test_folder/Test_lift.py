@@ -44,12 +44,13 @@ ev3.speaker.beep()
 #     pass
 # lift_motor.run(0)
 
-lift_motor.run_target(100, 100)
+print(lift_motor.angle())
+# lift_motor.run_target(100, 60)
 
-lift.lift(drivebase, lift_motor, touch_sensor)
+# lift.lift(drivebase, lift_motor, touch_sensor)
 
 
-while True:
-    Follow_path.obstical_check(drivebase, ultra_sens, ev3)
-    Follow_path.follow_path(drivebase, left_sens)
+# while True:
+#     Follow_path.obstical_check(drivebase, ultra_sens, ev3)
+#     Follow_path.follow_path(drivebase, left_sens)
 

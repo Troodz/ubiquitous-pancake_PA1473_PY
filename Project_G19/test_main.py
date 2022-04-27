@@ -22,14 +22,21 @@ drivebase = DriveBase(left_wheel, right_wheel,
 
 import lift
 
-wait(100)
-ev3.speaker.beep()
+# wait(100)
+# ev3.speaker.beep()
 
-lift_motor.run(-100)
-time = StopWatch()
-time.reset()
-while time.time() < 4000:
-    pass
-lift_motor.run(0)
+# lift_motor.run(-100)
+# time = StopWatch()
+# time.reset()
+# while time.time() < 4000:
+#     pass
+# lift_motor.run(0)
 
-lift.lift(drivebase, lift_motor, touch_sensor)
+# lift.lift(drivebase, lift_motor, touch_sensor)
+
+print(lift_motor.angle())
+for i in range(5):
+    lift_motor.run_target(1000, 270)
+    wait(1000)
+    lift_motor.run_target(100, 90)
+    wait(1000)
