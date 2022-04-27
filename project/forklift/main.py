@@ -98,7 +98,7 @@ def paralysed():
     right_motor.dc(0)
 def get_instructions():
     '''Getting instructions'''
-    return [Start_color, circulation_color, ]
+    return [Start_color, circulation_color, Color.BLUE]
 
 if __name__ == "__main__":
     #Variables in use
@@ -106,6 +106,7 @@ if __name__ == "__main__":
     current_line = None
     color_to_follow = None
     current_step = 0
+    instruction_list = []
     while(run_statement):
         driving(instruction_list)
         if obstacle_distance() < stopping_distance:
