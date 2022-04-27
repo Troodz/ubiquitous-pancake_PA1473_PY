@@ -36,20 +36,10 @@ wait(100)
 ev3.speaker.beep()
 # roboten startar
 
-#lift.lift(drivebase, lift_motor, touch_sensor)
+reflection_threshold = 0
+desired_color = Color.RED
 
-"""
-lift_motor.run(100)
-time = StopWatch()
-time.reset()
-while time.time() < 4000:
-    pass
-lift_motor.run(0)
-
-lift.lift(drivebase, lift_motor, touch_sensor)
-"""
-
-Follow_path.multiple_paths(drivebase, ultra_sens, ev3, left_sens)
-#while True:
-#    Follow_path.obstical_check(drivebase, ultra_sens, ev3)
-#    Follow_path.follow_path(drivebase, left_sens)
+while True:
+    obstical_ahead = Follow_path.obstical_ahead(drivebase, ultra_sens, ev3)
+    if obstical_ahead != True:
+        Follow_path.follow_straight_path(drivebase, left_sens, reflection_threshold, desired_color)

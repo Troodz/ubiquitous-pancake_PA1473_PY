@@ -3,16 +3,18 @@ from pybricks.ev3devices import (Motor, TouchSensor, ColorSensor,
                                  InfraredSensor, UltrasonicSensor, GyroSensor)
 from pybricks.tools import wait, StopWatch, DataLog
 
-def follow_path(drivebase, left_sens, reflection_threshold):
-    if left_sens.reflection() < reflection_threshold:
+def follow_straight_path(drivebase, left_sens, reflection_threshold, desired_color):
+    if left_sens.color() == desired_color:
         drivebase.drive(-50, 40)
     else:
         drivebase.drive(-50, -40)
 
-def obstical_check(drivebase, ultra_sens, ev3):
+def obstical_ahead(drivebase, ultra_sens, ev3):
     if ultra_sens.distance() < 200:
         drivebase.drive(0, 0)
-        ev3.speaker.say("Obstical detected")
+        ev3.speaker.say("Obstical ahead")
+        return True
+    return False
 
 def multiple_paths(drivebase, ultra_sens, ev3, left_sens):
 
@@ -33,7 +35,7 @@ def multiple_paths(drivebase, ultra_sens, ev3, left_sens):
         print("follows path")
         print(reflection_threshold)
         print(left_sens.color())
-        follow_path(drivebase, left_sens, reflection_threshold)
+        follow_straight_path(drivebase, left_sens, reflection_threshold)
         # if left_sens.color() == COLOR_THRESHOLD:
         #     drivebase.drive(DRIVE_SPEED, TURN_SPEED)
         # else:
