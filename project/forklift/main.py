@@ -22,15 +22,15 @@ working_speed = 100
 move_speed = -50
 run_statement = True
 instructions = False
-circulation_color = Color.BLUE
-Start_color = Color.BLUE
-color_list = [Color.RED, Color.BLUE, Color.BROWN]
+circulation_color = Color.BLACK
+Start_color = Color.GREEN
+
 ev3 = EV3Brick()
 
 def lift(up_down, angle):
     ev3.light.on(Color.YELLOW)
     #forklift.run_until_stalled(working_speed*up_down, then=Stop.HOLD, duty_limit=None)
-    forklift.run_angle(working_speed*up_down, angle, then=Stop.HOLD, wait=True)
+    forklift.run_target(working_speed*up_down, angle, then=Stop.HOLD, wait=True)
     ev3.light.on(Color.GREEN)
     return True
 
@@ -42,17 +42,25 @@ def lift_until_pressed():
     right_motor.dc(0)
     left_motor.dc(0)
     lift(-1, 50)
+def reset_clow():
+    forklift.run_until_stalled(working_speed, then=Stop.COAST, duty_limit=None)
+    forklift.reset_angle(0)
 
 def elevated_surface(direction):
-    forklift.run_angle(working_speed*direction, 60, then=Stop.HOLD, wait=True)
+
+    reset_clow()
+    forklift.run_target(working_speed*direction, -67, then=Stop.HOLD, wait=True)
     left_motor.dc(-50)
     right_motor.dc(-50)
     while(not touch_sensor.pressed()):
         wait (10)
     right_motor.dc(0)
     left_motor.dc(0)
-    lift(1, 80)
-    lift(-1, 40)
+    lift(-1, -90)
+    right_motor.dc(50)
+    left_motor.dc(50)
+    wait(2000)
+    lift(1, -67)
 
 def follow_line(line_color):
     '''This function will make the robot follow a selected line color'''
@@ -61,7 +69,7 @@ def follow_line(line_color):
         right_motor.dc(-50)
         left_motor.dc(25)
         wait(15)
-
+#140 -5 < 145 > +5 150
     else:
         left_motor.dc(-50)
         right_motor.dc(25)
@@ -71,6 +79,7 @@ def follow_line(line_color):
         right_motor.dc(-50)
 
     return current_line
+
 
 def user_controll():
     '''This functions waits for the user to make a active decision regarding somthing the robot can't'''
@@ -100,19 +109,28 @@ def paralysed():
     right_motor.dc(0)
 def get_instructions():
     '''Getting instructions'''
-    return [Start_color, circulation_color, Color.RED]
+    #RondellButton.DOWN in ev3.buttons.pressed():
+    ev3.screen.draw_text(40, 50, "Choose 3 colors")
+    my_list = []
+    pressed = 0
+    while len(my_list) != 3:
+        if Button.DOWN in ev3.buttons.pressed():
+            my_list.append(line_sensor.color())
+            print(my_list)
+            wait(1000)
+
+    print(my_list)
+    return my_list #[Start_color, circulation_color, Color.BLUE]
 
 if __name__ == "__main__":
     #Variables in use
     current_step = 0
     instruction_list = []
-    #lift_until_pressed()
-    # left_motor.dc(-50)
-    # right_motor.dc(25)
 
+    #check_colors()
     while(run_statement):
 
-        #driving(instruction_list)
+
         if obstacle_distance() < stopping_distance:
             avoid_collison()
             pass
@@ -123,9 +141,10 @@ if __name__ == "__main__":
 
         else:
             current_color = follow_line(instruction_list[current_step])
+            print(f"{current_color} {current_step}")
             if current_color == instruction_list[current_step + 1]:
                 current_step = current_step + 1
                 if current_step == len(instruction_list)-1:
                     current_step = 0
-                    print("hej")
+
                     instruction_list.reverse()
