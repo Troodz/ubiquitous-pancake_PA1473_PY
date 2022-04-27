@@ -6,11 +6,11 @@ from pybricks.robotics import DriveBase
 
 
 def lift_fork(lift_motor):
-    lift_motor.run_angle(100, 60)
+    lift_motor.run_target(1000, 270)
 
 
 def lower_lift_fork(lift_motor):
-    lift_motor.run_angle(100, 60)
+    lift_motor.run_target(100, 90)
 
 
 def check_pallet(lift_motor, touch_sensor):
