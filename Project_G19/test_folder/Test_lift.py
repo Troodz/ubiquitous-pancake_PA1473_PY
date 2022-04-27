@@ -31,26 +31,4 @@ ultra_sens = UltrasonicSensor(Port.S4)
 drivebase = DriveBase(left_wheel, right_wheel,
                         wheel_diameter=47, axle_track=128)
 
-wait(100)
-ev3.speaker.beep()
-# roboten startar
-
-#lift.lift(drivebase, lift_motor, touch_sensor)
-
-# lift_motor.run(-100)
-# time = StopWatch()
-# time.reset()
-# while time.time() < 4000:
-#     pass
-# lift_motor.run(0)
-
-print(lift_motor.angle())
-# lift_motor.run_target(100, 60)
-
-# lift.lift(drivebase, lift_motor, touch_sensor)
-
-
-# while True:
-#     Follow_path.obstical_check(drivebase, ultra_sens, ev3)
-#     Follow_path.follow_path(drivebase, left_sens)
 
