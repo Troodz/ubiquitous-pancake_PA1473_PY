@@ -15,7 +15,6 @@ ev3 = EV3Brick()
 
 # Write your program here.
 ev3.speaker.beep()
-
 #############################################################
 
 # Våra importer
@@ -38,12 +37,14 @@ ev3.speaker.beep()
 
 #lift.lift(drivebase, lift_motor, touch_sensor)
 
-lift_motor.run(-100)
-time = StopWatch()
-time.reset()
-while time.time() < 4000:
-    pass
-lift_motor.run(0)
+# lift_motor.run(-100)
+# time = StopWatch()
+# time.reset()
+# while time.time() < 4000:
+#     pass
+# lift_motor.run(0)
+
+lift_motor.run_target(100, 100)
 
 lift.lift(drivebase, lift_motor, touch_sensor)
 
