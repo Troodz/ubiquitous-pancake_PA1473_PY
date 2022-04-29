@@ -41,9 +41,9 @@ import lift
 #     lift_motor.run_target(100, 90)
 #     wait(1000)
 
+# if (lift.lift(drivebase, lift_motor, touch_sensor, 0)):
+#     print("picked up pallet.")
+# else:
+#     print("failed to pickup pallet.")
 
-
-
-# lift.reset_lift(lift_motor)
-
-lift.lift(drivebase, lift_motor, touch_sensor, 0)
+# print(touch_sensor.pressed())
