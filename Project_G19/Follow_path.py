@@ -1,10 +1,12 @@
 
+from pickle import TRUE
+from numpy import true_divide
 from pybricks.ev3devices import (Motor, TouchSensor, ColorSensor,
                                  InfraredSensor, UltrasonicSensor, GyroSensor)
 from pybricks.tools import wait, StopWatch, DataLog
 from pybricks.parameters import Port, Stop, Direction, Button, Color
 
-def follow_straight_path(drivebase, left_sens, reflection_threshold, desired_color):
+def follow_straight_path(drivebase, left_sens, desired_color):
     if left_sens.color() == desired_color:
         drivebase.drive(-50, 40)
     else:
@@ -35,3 +37,15 @@ def multiple_paths(drivebase, ultra_sens, ev3, left_sens):
 
 
 
+def find_desired_path(drivebase,desired_color,left_sens):
+    go =TRUE
+    while go:
+        if left_sens.color() == Color.WHITE :
+            drivebase.drive(-50, 40)
+        else:
+            drivebase.drive(-50, -40)
+            if left_sens.color() == desired_color:
+                drivebase.drive(0,0)
+                go = False
+    #follow_straight_path(drivebase, left_sens, desired_color)
+    return desired_color
