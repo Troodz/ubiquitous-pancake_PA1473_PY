@@ -38,8 +38,12 @@ ev3.speaker.beep()
 
 reflection_threshold = 0
 desired_color = Color.RED
+obstacle_detected = False
 
 while True:
-    obstical_ahead = Follow_path.obstical_ahead(drivebase, ultra_sens, ev3)
-    if obstical_ahead != True:
+    lifted = False ## Lägg in lifted funktion som returnerar bool
+    if lifted == False:
+        obstacle_detected = Follow_path.obstacle_ahead(drivebase, ultra_sens, ev3)
+    if obstacle_detected == False:
         Follow_path.follow_straight_path(drivebase, left_sens, reflection_threshold, desired_color)
+        #Follow_path.multiple_paths(drivebase, ultra_sens, ev3, left_sens)

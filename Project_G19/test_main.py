@@ -40,3 +40,10 @@ lift.lift(drivebase, lift_motor, touch_sensor)
 #     wait(1000)
 #     lift_motor.run_target(100, 90)
 #     wait(1000)
+
+
+
+
+
+
+
