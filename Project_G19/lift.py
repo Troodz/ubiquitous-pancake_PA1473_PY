@@ -23,20 +23,24 @@ def has_pallet(touch_sensor: TouchSensor):
     return touch_sensor.pressed()
 
 
-def lift(drive_base: DriveBase, lift_motor: Motor, touch_sensor: TouchSensor, height: int = 0):
+def lift(drive_base: DriveBase, lift_motor: Motor, touch_sensor: TouchSensor, height: int = 0) -> bool:
     drive_base.drive(-100, 0)
     time = StopWatch()
     time.reset()
+
     while not has_pallet(touch_sensor) and time.time() < 4000:
         pass
     backing_time = time.time()
+    drive_base.drive(0, 0)
+
+    if backing_time >= 4000:
+        return False
+
     if has_pallet(touch_sensor):
-        drive_base.drive(0, 0)
         wait(500)
         lift_fork(lift_motor)
-        check_pallet(lift_motor, touch_sensor) # kontrollerar om pallen fortfarande är kvar
-        wait(500)
-    time = StopWatch()
+
+    drive_base.drive(-100, 0)
     time.reset()
     drive_base.drive(100, 0)
     while time.time() < (backing_time-500): #Backar så långt som den körde fram
