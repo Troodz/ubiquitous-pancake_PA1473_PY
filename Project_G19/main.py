@@ -39,6 +39,7 @@ ev3.speaker.beep()
 reflection_threshold = 0
 desired_color = Color.RED
 obstacle_detected = False
+should_lift = False
 
 while True:
     lifted = False ## Lägg in lifted funktion som returnerar bool
@@ -47,3 +48,5 @@ while True:
     if obstacle_detected == False:
         Follow_path.follow_straight_path(drivebase, left_sens, reflection_threshold, desired_color)
         #Follow_path.multiple_paths(drivebase, ultra_sens, ev3, left_sens)
+    if should_lift:
+        lifted = lift.lift(drivebase, lift_motor, touch_sensor)
