@@ -22,6 +22,10 @@ def check_pallet(lift_motor, touch_sensor):
 def has_pallet(touch_sensor: TouchSensor):
     return touch_sensor.pressed()
 
+def reset_lift(lift_motor):
+    lift_motor.run_until_stalled(100)
+    lift_motor.reset_angle(0)
+
 
 def lift(drive_base: DriveBase, lift_motor: Motor, touch_sensor: TouchSensor, height: int = 0) -> bool:
     drive_base.drive(-100, 0)

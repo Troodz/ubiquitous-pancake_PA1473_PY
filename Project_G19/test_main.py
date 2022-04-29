@@ -44,7 +44,6 @@ import lift
 
 
 
-
-
+# lift.reset_lift(lift_motor)
 
 lift.lift(drivebase, lift_motor, touch_sensor, 0)
