@@ -20,30 +20,16 @@ drivebase = DriveBase(left_wheel, right_wheel,
 
 ###########################################################
 
-import lift
+import lift, Follow_path
 
-# wait(100)
-# ev3.speaker.beep()
+new_color = Color.BLUE
+desired_color = Color.RED
 
-# lift_motor.run(-100)
-# time = StopWatch()
-# time.reset()
-# while time.time() < 4000:
-#     pass
-# lift_motor.run(0)
-
-# lift.lift(drivebase, lift_motor, touch_sensor)
-
-# print(lift_motor.angle())
-# for i in range(5):
-#     lift_motor.run_target(1000, 270)
-#     wait(1000)
-#     lift_motor.run_target(100, 90)
-#     wait(1000)
-
-# if (lift.lift(drivebase, lift_motor, touch_sensor, 0)):
-#     print("picked up pallet.")
-# else:
-#     print("failed to pickup pallet.")
-
-# print(touch_sensor.pressed())
+while True:
+    Follow_path.follow_straight_path(drivebase, left_sens, desired_color)
+    if left_sens.color() == new_color:
+        drivebase.straight(-100)
+        while left_sens.color() != new_color:
+            drivebase.turn(-10)
+        desired_color = new_color
+        new_color = Color.RED

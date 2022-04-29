@@ -19,10 +19,9 @@ def obstacle_ahead(drivebase, ultra_sens, ev3):
 
 def find_desired_path(ev3,drivebase,desired_color,left_sens):
     'hittar desierd path och retunerar desierd color'
-    ev3.speaker.beep()
     ev3.light.on(desired_color)
     while left_sens.color() != desired_color:
-        if left_sens.color() == Color.WHITE :
+        if left_sens.color() == Color.WHITE:
             drivebase.drive(-50, 40)
         else:
             drivebase.drive(-50, -40)

@@ -19,7 +19,7 @@ ev3.speaker.beep()
 #############################################################
 
 # Våra importer
-import lift, Follow_path
+import lift, Follow_path, ware_house
 
 ev3 = EV3Brick()
 left_wheel = Motor(Port.B)
@@ -32,20 +32,25 @@ ultra_sens = UltrasonicSensor(Port.S4)
 drivebase = DriveBase(left_wheel, right_wheel,
                         wheel_diameter=47, axle_track=128)
 
-wait(100)
+
 ev3.speaker.beep()
 # roboten startar
 
 reflection_threshold = 0
 desired_color = Color.RED
 obstacle_detected = False
-should_lift = False
+in_warehouse = False
 found=True
+lifted = False ## Lägg in lifted funktion som returnerar bool
 
 while True:
-    lifted = False ## Lägg in lifted funktion som returnerar bool
-    if lifted == False:
+    print("pallet ahead: ", ware_house.pallet_ahead(drivebase, ultra_sens))
+    print("Obstacle detected: ", obstacle_detected)
+    
+    if lifted == False and in_warehouse == False:
         obstacle_detected = Follow_path.obstacle_ahead(drivebase, ultra_sens, ev3)
+    if ware_house.pallet_ahead(drivebase, ultra_sens) == True and not lifted:
+        lifted = lift.lift(drivebase, lift_motor, touch_sensor)
     if obstacle_detected == False:
         if found == True:
             Follow_path.find_desired_path(ev3,drivebase,desired_color,left_sens)
