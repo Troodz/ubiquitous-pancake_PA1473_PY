@@ -6,9 +6,9 @@ from pybricks.parameters import Port, Stop, Direction, Button, Color
 
 def follow_straight_path(drivebase, left_sens, desired_color):
     if left_sens.color() == desired_color:
-        drivebase.drive(-120, 40)
+        drivebase.drive(-60, 40)
     else:
-        drivebase.drive(-120, -40)
+        drivebase.drive(-60, -40)
 
 def obstacle_ahead(drivebase, ultra_sens, ev3):
     if ultra_sens.distance() < 200:
@@ -26,4 +26,4 @@ def find_desired_path(ev3,drivebase,desired_color,left_sens):
             drivebase.drive(-50, 40)
         else:
             drivebase.drive(-50, -40)
-    return desired_color
+    return False

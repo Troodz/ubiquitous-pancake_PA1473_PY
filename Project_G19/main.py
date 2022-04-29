@@ -40,13 +40,14 @@ reflection_threshold = 0
 desired_color = Color.RED
 obstacle_detected = False
 should_lift = False
+found=True
 
 while True:
     lifted = False ## Lägg in lifted funktion som returnerar bool
     if lifted == False:
         obstacle_detected = Follow_path.obstacle_ahead(drivebase, ultra_sens, ev3)
     if obstacle_detected == False:
-        Follow_path.follow_straight_path(drivebase, left_sens, reflection_threshold, desired_color)
-        #Follow_path.multiple_paths(drivebase, ultra_sens, ev3, left_sens)
-    if should_lift:
-        lifted = lift.lift(drivebase, lift_motor, touch_sensor)
+        if found == True:
+            Follow_path.find_desired_path(ev3,drivebase,desired_color,left_sens)
+    Follow_path.follow_straight_path(drivebase, left_sens, desired_color)
+
