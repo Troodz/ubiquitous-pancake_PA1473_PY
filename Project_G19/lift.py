@@ -6,7 +6,7 @@ from pybricks.robotics import DriveBase
 
 
 def lift_fork(lift_motor):
-    lift_motor.track_target(270)
+    lift_motor.track_target(-270)
 
 
 def lower_lift_fork(lift_motor):
@@ -24,7 +24,7 @@ def has_pallet(touch_sensor: TouchSensor):
 
 
 def lift(drive_base: DriveBase, lift_motor: Motor, touch_sensor: TouchSensor, height: int = 0) -> bool:
-    drive_base.drive(100, 0)
+    drive_base.drive(-100, 0)
     time = StopWatch()
     time.reset()
 
@@ -41,9 +41,10 @@ def lift(drive_base: DriveBase, lift_motor: Motor, touch_sensor: TouchSensor, he
     if has_pallet(touch_sensor):
         wait(500)
         lift_fork(lift_motor)
+        wait(500)
 
     time.reset()
-    drive_base.drive(-100, 0)
+    drive_base.drive(100, 0)
     while time.time() < backing_time: #Backar så långt som den körde fram
         pass
     drive_base.drive(0, 0)
