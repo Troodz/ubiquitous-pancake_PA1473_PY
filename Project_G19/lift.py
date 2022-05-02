@@ -38,14 +38,14 @@ def reset_lift(lift_motor):
 def return_back(drive_base: DriveBase, duration):
     time = StopWatch()
     time.reset()
-    drive_base.drive(100, 0)
+    drive_base.drive(-100, 0)
     while time.time() < duration: #Backar så långt som den körde fram
         pass
     drive_base.drive(0, 0)
 
 
 def lift(drive_base: DriveBase, lift_motor: Motor, touch_sensor: TouchSensor, height: int = 0) -> bool:
-    drive_base.drive(-100, 0)
+    drive_base.drive(100, 0)
     time = StopWatch()
     time.reset()
 

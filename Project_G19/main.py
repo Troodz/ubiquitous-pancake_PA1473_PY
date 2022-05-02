@@ -21,10 +21,12 @@ ev3.speaker.beep()
 # Våra importer
 import lift, Follow_path, ware_house
 
+motor_direction = Direction.COUNTERCLOCKWISE
+
 ev3 = EV3Brick()
-left_wheel = Motor(Port.B)
-right_wheel = Motor(Port.C)
-lift_motor = Motor(Port.A)
+left_wheel = Motor(Port.B, positive_direction=motor_direction)
+right_wheel = Motor(Port.C, positive_direction=motor_direction)
+lift_motor = Motor(Port.A, gears=(12,36), positive_direction=Direction.COUNTERCLOCKWISE)
 touch_sensor = TouchSensor(Port.S1)
 left_sens = ColorSensor(Port.S3)
 ultra_sens = UltrasonicSensor(Port.S4)
@@ -44,9 +46,20 @@ in_warehouse = False
 found=True
 lifted = False ## Lägg in lifted funktion som returnerar bool
 
+color_queue = [Color.RED, Color.BLUE, Color.BLACK]
+
+def get_color(queue: list[Color]) -> Color:
+    tmp = queue[0]
+    queue.remove(queue[0])
+    queue.append(tmp)
+    return tmp
+
+desired_color = get_color(color_queue)
+
 while True:
-    print("pallet ahead: ", ware_house.pallet_ahead(drivebase, ultra_sens))
-    print("Obstacle detected: ", obstacle_detected)
+    # print("pallet ahead: ", ware_house.pallet_ahead(drivebase, ultra_sens))
+    # print("Obstacle detected: ", obstacle_detected)
+    print("is lifting: ", lifted)
     
     if lifted == False and in_warehouse == False:
         obstacle_detected = Follow_path.obstacle_ahead(drivebase, ultra_sens, ev3)
@@ -55,5 +68,5 @@ while True:
     if obstacle_detected == False:
         if left_sens.color() == desired_color:
             current_color = Follow_path.find_desired_path(ev3, drivebase, desired_color, left_sens)
-            desired_color = Color.RED
+            desired_color = get_color(color_queue)
     Follow_path.follow_straight_path(drivebase, left_sens, current_color)
