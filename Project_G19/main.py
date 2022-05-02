@@ -37,7 +37,8 @@ ev3.speaker.beep()
 # roboten startar
 
 reflection_threshold = 0
-desired_color = Color.RED
+desired_color = Color.BLUE
+current_color = Color.RED
 obstacle_detected = False
 in_warehouse = False
 found=True
@@ -52,7 +53,7 @@ while True:
     if ware_house.pallet_ahead(drivebase, ultra_sens) == True and not lifted:
         lifted = lift.lift(drivebase, lift_motor, touch_sensor)
     if obstacle_detected == False:
-        if found == True:
-            Follow_path.find_desired_path(ev3,drivebase,desired_color,left_sens)
-    Follow_path.follow_straight_path(drivebase, left_sens, desired_color)
-
+        if left_sens.color() == desired_color:
+            current_color = Follow_path.find_desired_path(ev3, drivebase, desired_color, left_sens)
+            desired_color = Color.RED
+    Follow_path.follow_straight_path(drivebase, left_sens, current_color)

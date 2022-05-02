@@ -17,6 +17,16 @@ def obstacle_ahead(drivebase, ultra_sens, ev3):
         return True
     return False
 
+
+def find_desired_path(ev3, drivebase, desired_color, left_sens):
+    drivebase.straight(-100)
+    while left_sens.color() != desired_color: # snurrar och söker efter färgen
+        drivebase.turn(-10)
+        drivebase.straight(20)
+    return desired_color
+
+
+"""
 def find_desired_path(ev3,drivebase,desired_color,left_sens):
     'hittar desierd path och retunerar desierd color'
     ev3.light.on(desired_color)
@@ -26,3 +36,6 @@ def find_desired_path(ev3,drivebase,desired_color,left_sens):
         else:
             drivebase.drive(-50, -40)
     return False
+"""
+
+

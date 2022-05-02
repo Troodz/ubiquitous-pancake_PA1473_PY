@@ -22,14 +22,14 @@ drivebase = DriveBase(left_wheel, right_wheel,
 
 import lift, Follow_path
 
-new_color = Color.BLUE
-desired_color = Color.RED
+desired_color = Color.BLUE
+current_color = Color.RED
 
 while True:
-    Follow_path.follow_straight_path(drivebase, left_sens, desired_color)
-    if left_sens.color() == new_color:
+    Follow_path.follow_straight_path(drivebase, left_sens, current_color)
+    if left_sens.color() == desired_color:
         drivebase.straight(-100)
-        while left_sens.color() != new_color:
+        while left_sens.color() != desired_color: # snurrar och söker efter färgen
             drivebase.turn(-10)
-        desired_color = new_color
-        new_color = Color.RED
+        current_color = desired_color
+        desired_color = Color.RED # 
