@@ -46,7 +46,7 @@ in_warehouse = False
 found=True
 lifted = False ## Lägg in lifted funktion som returnerar bool
 
-color_queue = [Color.RED, Color.BLUE, Color.BLACK]
+color_queue = [Color.BLUE, Color.BLACK, Color.RED]
 
 def get_color(queue: list[Color]) -> Color:
     tmp = queue[0]
@@ -59,13 +59,15 @@ desired_color = get_color(color_queue)
 while True:
     # print("pallet ahead: ", ware_house.pallet_ahead(drivebase, ultra_sens))
     # print("Obstacle detected: ", obstacle_detected)
-    print("is lifting: ", lifted)
+    # print("is lifting: ", lifted)
     
-    if lifted == False and in_warehouse == False:
+    if not lifted and not in_warehouse:
+        drivebase.drive(0,0)
         obstacle_detected = Follow_path.obstacle_ahead(drivebase, ultra_sens, ev3)
-    if ware_house.pallet_ahead(drivebase, ultra_sens) == True and not lifted:
+        print("obstacle detected")
+    if ware_house.pallet_ahead(drivebase, ultra_sens) and not lifted:
         lifted = lift.lift(drivebase, lift_motor, touch_sensor)
-    if obstacle_detected == False:
+    if not obstacle_detected:
         if left_sens.color() == desired_color:
             current_color = Follow_path.find_desired_path(ev3, drivebase, desired_color, left_sens)
             desired_color = get_color(color_queue)
