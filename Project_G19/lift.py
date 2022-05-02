@@ -14,7 +14,7 @@ def get_lift_angle(height: float,
     return math.degrees(math.asin((height + fork_height - joint_height)/arm_length)-math.radians(angle_offset))
 
 def lift_fork(lift_motor):
-    lift_motor.track_target(-270)
+    lift_motor.track_target(60)
 
 
 def lower_lift_fork(lift_motor):
@@ -31,8 +31,8 @@ def has_pallet(touch_sensor: TouchSensor):
     return touch_sensor.pressed()
 
 def reset_lift(lift_motor):
-    lift_motor.run_until_stalled(100)
-    lift_motor.reset_angle(0)
+    lift_motor.run_until_stalled(-100)
+    lift_motor.reset_angle(-15)
 
     
 def return_back(drive_base: DriveBase, duration):

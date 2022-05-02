@@ -7,10 +7,12 @@ from pybricks.tools import wait, StopWatch, DataLog
 from pybricks.robotics import DriveBase
 from pybricks.media.ev3dev import SoundFile, ImageFile
 
+motor_direction = Direction.COUNTERCLOCKWISE
+
 ev3 = EV3Brick()
-left_wheel = Motor(Port.B)
-right_wheel = Motor(Port.C)
-lift_motor = Motor(Port.A)
+left_wheel = Motor(Port.B, positive_direction=motor_direction)
+right_wheel = Motor(Port.C, positive_direction=motor_direction)
+lift_motor = Motor(Port.A, gears=(12,36), positive_direction=Direction.COUNTERCLOCKWISE)
 touch_sensor = TouchSensor(Port.S1)
 left_sens = ColorSensor(Port.S3)
 ultra_sens = UltrasonicSensor(Port.S4)
@@ -22,14 +24,5 @@ drivebase = DriveBase(left_wheel, right_wheel,
 
 import lift, Follow_path
 
-desired_color = Color.BLUE
-current_color = Color.RED
-
-while True:
-    Follow_path.follow_straight_path(drivebase, left_sens, current_color)
-    if left_sens.color() == desired_color:
-        drivebase.straight(-100)
-        while left_sens.color() != desired_color: # snurrar och söker efter färgen
-            drivebase.turn(-10)
-        current_color = desired_color
-        desired_color = Color.RED # 
+lift.reset_lift(lift_motor)
+lift.lift(drivebase, lift_motor, touch_sensor)
