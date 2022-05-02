@@ -56,19 +56,25 @@ def get_color(queue: list[Color]) -> Color:
 
 desired_color = get_color(color_queue)
 
+lift.reset_lift(lift_motor)
+
 while True:
     # print("pallet ahead: ", ware_house.pallet_ahead(drivebase, ultra_sens))
     # print("Obstacle detected: ", obstacle_detected)
     # print("is lifting: ", lifted)
     
     if not lifted and not in_warehouse:
-        drivebase.drive(0,0)
         obstacle_detected = Follow_path.obstacle_ahead(drivebase, ultra_sens, ev3)
-        print("obstacle detected")
-    if ware_house.pallet_ahead(drivebase, ultra_sens) and not lifted:
-        lifted = lift.lift(drivebase, lift_motor, touch_sensor)
+        print("obstacle detected", obstacle_detected)
+    if in_warehouse:
+        if ware_house.pallet_ahead(drivebase, ultra_sens) and not lifted:
+            lifted = lift.lift(drivebase, lift_motor, touch_sensor)
     if not obstacle_detected:
         if left_sens.color() == desired_color:
             current_color = Follow_path.find_desired_path(ev3, drivebase, desired_color, left_sens)
             desired_color = get_color(color_queue)
+    
+    if current_color == Color.BLACK:
+        in_warehouse = True
+
     Follow_path.follow_straight_path(drivebase, left_sens, current_color)

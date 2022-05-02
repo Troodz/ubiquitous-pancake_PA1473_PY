@@ -15,7 +15,6 @@ def obstacle_ahead(drivebase, ultra_sens, ev3):
     if ultra_sens.distance() < 200:
         drivebase.drive(0, 0)
         ev3.speaker.say("Obstacle ahead")
-        wait(1000)
         return True
     return False
 
