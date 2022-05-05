@@ -35,6 +35,7 @@ def lift(up_down, angle):
     return True
 
 def lift_until_pressed():
+
     right_motor.dc(-50)
     left_motor.dc(-50)
     while(not touch_sensor.pressed()):
@@ -47,8 +48,6 @@ def reset_clow():
     forklift.reset_angle(0)
 
 def elevated_surface(direction):
-
-    reset_clow()
     forklift.run_target(working_speed*direction, -67, then=Stop.HOLD, wait=True)
     left_motor.dc(-50)
     right_motor.dc(-50)
@@ -126,7 +125,7 @@ if __name__ == "__main__":
     #Variables in use
     current_step = 0
     instruction_list = []
-
+    reset_clow()
     #check_colors()
     while(run_statement):
 
