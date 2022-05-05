@@ -29,9 +29,11 @@ ev3 = EV3Brick()
 
 def lift(up_down, angle):
     ev3.light.on(Color.YELLOW)
+    ev3.screen.draw_text(40, 50, "Lifting")
     #forklift.run_until_stalled(working_speed*up_down, then=Stop.HOLD, duty_limit=None)
     forklift.run_target(working_speed*up_down, angle, then=Stop.HOLD, wait=True)
     ev3.light.on(Color.GREEN)
+    ev3.screen.clear()
     return True
 
 def lift_until_pressed():
@@ -44,9 +46,11 @@ def lift_until_pressed():
     left_motor.dc(0)
     lift(-1, 50)
 def reset_clow():
+    ev3.screen.draw_text(40, 50, "Reseting clow")
+
     forklift.run_until_stalled(working_speed, then=Stop.COAST, duty_limit=None)
     forklift.reset_angle(0)
-
+    ev3.screen.clear()
 def elevated_surface(direction):
     forklift.run_target(working_speed*direction, -67, then=Stop.HOLD, wait=True)
     left_motor.dc(-50)
@@ -108,8 +112,10 @@ def paralysed():
     right_motor.dc(0)
 def get_instructions():
     '''Getting instructions'''
+    ev3.screen.clear()
     #RondellButton.DOWN in ev3.buttons.pressed():
     ev3.screen.draw_text(40, 50, "Choose 3 colors")
+
     my_list = []
     pressed = 0
     while len(my_list) != 3:
@@ -119,6 +125,7 @@ def get_instructions():
             wait(1000)
 
     print(my_list)
+    ev3.screen.clear()
     return my_list #[Start_color, circulation_color, Color.BLUE]
 
 if __name__ == "__main__":
@@ -126,7 +133,9 @@ if __name__ == "__main__":
     current_step = 0
     instruction_list = []
     reset_clow()
-    #check_colors()
+    #Workshop 2
+    #lift_until_pressed
+    #elevated_surface(-1)
     while(run_statement):
 
 
