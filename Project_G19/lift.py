@@ -71,11 +71,11 @@ def lift(drive_base: DriveBase, lift_motor: Motor, touch_sensor: TouchSensor, he
         lift_fork(lift_motor)
         end_angle = lift_motor.angle()
         can_lift = check_if_can_lift_pallet(start_angel, end_angle)
-        print(can_lift)
         wait(500)
     
     # if the time it took to find the pallet is longer than some time then no pallet has been found.
     if backing_time >= 4000 or not can_lift:
+        print("Aborting collection")
         reset_lift(lift_motor)
         return_back(drive_base, backing_time)
         return False
