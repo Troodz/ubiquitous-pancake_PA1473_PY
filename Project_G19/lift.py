@@ -38,10 +38,6 @@ def check_if_can_lift_pallet(before, after):
     if (after-before) < 10:
         return False
     return True
-
-def lift_failed(drive_base, backing_time):
-    return_back(drive_base, backing_time)
-    return False
     
 def return_back(drive_base: DriveBase, duration):
     time = StopWatch()

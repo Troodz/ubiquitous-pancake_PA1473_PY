@@ -70,6 +70,7 @@ while True:
             lifted = lift.lift(drivebase, lift_motor, touch_sensor)
     if not obstacle_detected:
         if left_sens.color() == desired_color:
+            ev3.screen.clear()
             current_color = Follow_path.find_desired_path(ev3, drivebase, desired_color, left_sens)
             desired_color = get_color(color_queue)
     

@@ -7,7 +7,6 @@ from pybricks.parameters import Port, Stop, Direction, Button, Color
 
 def follow_straight_path(drivebase, left_sens, desired_color, ev3):
     ev3.light.on(desired_color)
-    ev3.screen.clear()
     ev3.screen.draw_text(50,50,str(desired_color))
     if left_sens.color() == desired_color:
         drivebase.drive(60, -40)
