@@ -23,6 +23,5 @@ drivebase = DriveBase(left_wheel, right_wheel,
 ###########################################################
 
 while True:
-    lift_motor.track_target(45)
     print(left_sens.color())
     wait(1000)

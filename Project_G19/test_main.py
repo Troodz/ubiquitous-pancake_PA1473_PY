@@ -24,5 +24,4 @@ drivebase = DriveBase(left_wheel, right_wheel,
 
 import lift, Follow_path
 
-lift.reset_lift(lift_motor)
 lift.lift(drivebase, lift_motor, touch_sensor)

@@ -26,7 +26,7 @@ motor_direction = Direction.COUNTERCLOCKWISE
 ev3 = EV3Brick()
 left_wheel = Motor(Port.B, positive_direction=motor_direction)
 right_wheel = Motor(Port.C, positive_direction=motor_direction)
-lift_motor = Motor(Port.A, gears=(12,36), positive_direction=Direction.COUNTERCLOCKWISE)
+lift_motor = Motor(Port.A, gears=(12,36), positive_direction=Direction.CLOCKWISE)
 touch_sensor = TouchSensor(Port.S1)
 left_sens = ColorSensor(Port.S3)
 ultra_sens = UltrasonicSensor(Port.S4)
@@ -39,14 +39,13 @@ ev3.speaker.beep()
 # roboten startar
 
 reflection_threshold = 0
-desired_color = Color.BLUE
-current_color = Color.RED
+current_color = Color.BROWN
 obstacle_detected = False
 in_warehouse = False
 found=True
 lifted = False ## Lägg in lifted funktion som returnerar bool
 
-color_queue = [Color.BLUE, Color.BLACK, Color.RED]
+color_queue = [Color.RED, Color.BROWN]
 
 def get_color(queue: list[Color]) -> Color:
     tmp = queue[0]
@@ -62,10 +61,10 @@ while True:
     # print("pallet ahead: ", ware_house.pallet_ahead(drivebase, ultra_sens))
     # print("Obstacle detected: ", obstacle_detected)
     # print("is lifting: ", lifted)
+    #print("obstacle detected", obstacle_detected)
     
     if not lifted and not in_warehouse:
         obstacle_detected = Follow_path.obstacle_ahead(drivebase, ultra_sens, ev3)
-        print("obstacle detected", obstacle_detected)
     if in_warehouse:
         if ware_house.pallet_ahead(drivebase, ultra_sens) and not lifted:
             lifted = lift.lift(drivebase, lift_motor, touch_sensor)
@@ -74,7 +73,11 @@ while True:
             current_color = Follow_path.find_desired_path(ev3, drivebase, desired_color, left_sens)
             desired_color = get_color(color_queue)
     
-    if current_color == Color.BLACK:
+    if current_color == Color.RED:
         in_warehouse = True
 
+    
+
+    print("Current color:", current_color)
+    print("Sens", left_sens.color())
     Follow_path.follow_straight_path(drivebase, left_sens, current_color)
