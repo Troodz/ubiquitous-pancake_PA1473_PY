@@ -39,7 +39,7 @@ ev3.speaker.beep()
 # roboten startar
 
 reflection_threshold = 0
-current_color = Color.BROWN
+current_color = Color.BLUE
 obstacle_detected = False
 in_warehouse = False
 found=True
@@ -80,4 +80,4 @@ while True:
 
     print("Current color:", current_color)
     print("Sens", left_sens.color())
-    Follow_path.follow_straight_path(drivebase, left_sens, current_color)
+    Follow_path.follow_straight_path(drivebase, left_sens, current_color, ev3)
