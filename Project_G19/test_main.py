@@ -12,7 +12,7 @@ motor_direction = Direction.COUNTERCLOCKWISE
 ev3 = EV3Brick()
 left_wheel = Motor(Port.B, positive_direction=motor_direction)
 right_wheel = Motor(Port.C, positive_direction=motor_direction)
-lift_motor = Motor(Port.A, gears=(12,36), positive_direction=Direction.COUNTERCLOCKWISE)
+lift_motor = Motor(Port.A, gears=(12,36), positive_direction=Direction.CLOCKWISE)
 touch_sensor = TouchSensor(Port.S1)
 left_sens = ColorSensor(Port.S3)
 ultra_sens = UltrasonicSensor(Port.S4)
@@ -23,5 +23,7 @@ drivebase = DriveBase(left_wheel, right_wheel,
 ###########################################################
 
 import lift, Follow_path
+
+lift.reset_lift(lift_motor)
 
 lift.lift(drivebase, lift_motor, touch_sensor)
