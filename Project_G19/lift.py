@@ -34,6 +34,15 @@ def reset_lift(lift_motor):
     lift_motor.run_until_stalled(-100)
     lift_motor.reset_angle(-15)
 
+def check_if_can_lift_pallet(before, after):
+    print(before-after)
+    if (after-before) < 3:
+        return False
+    return True
+
+def lift_failed(drive_base, backing_time):
+    return_back(drive_base, backing_time)
+    return False
     
 def return_back(drive_base: DriveBase, duration):
     time = StopWatch()
@@ -56,16 +65,21 @@ def lift(drive_base: DriveBase, lift_motor: Motor, touch_sensor: TouchSensor, he
     backing_time -= 500 # magic number otherwise robot backs too much
     drive_base.drive(0, 0)
 
-    # if the time it took to find the pallet is longer than some time then no pallet has been found.
-    if backing_time >= 4000:
-        return_back(drive_base, backing_time)
-        return False
-
     # otherwise if the pallet has been found then lift the fork.
     if has_pallet(touch_sensor):
         wait(500)
+        start_angel = lift_motor.angle()
         lift_fork(lift_motor)
+        end_angle = lift_motor.angle()
+        can_lift = check_if_can_lift_pallet(start_angel, end_angle)
         wait(500)
+    
+    # if the time it took to find the pallet is longer than some time then no pallet has been found.
+    if backing_time >= 4000 or not can_lift:
+        print("Aborting collection")
+        reset_lift(lift_motor)
+        return_back(drive_base, backing_time)
+        return False
 
     return_back(drive_base, backing_time)
 
