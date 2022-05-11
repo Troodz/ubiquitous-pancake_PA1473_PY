@@ -1,57 +1,71 @@
 #!/usr/bin/env pybricks-micropython
 #Libaries
+import math
 #EV3
-from pybricks.ev3devices import Motor, ColorSensor, UltrasonicSensor, TouchSensor
+from pybricks.ev3devices import Motor, ColorSensor, UltrasonicSensor, TouchSensor, InfraredSensor
 from pybricks.parameters import Port, Direction, Button, Color, Stop
 from pybricks.tools import wait
 from pybricks.hubs import EV3Brick
 from pybricks.robotics import DriveBase
+from pybricks.media.ev3dev import Font
 #Python
 
 #Definitons
-left_motor = Motor(Port.C)#kan vara omvänt
-right_motor = Motor(Port.B)#ingen aning faktiskt vilken port som är vad jag hittar bara på
+left_motor = Motor(Port.B)#kan vara omvänt
+right_motor = Motor(Port.C)#ingen aning faktiskt vilken port som är vad jag hittar bara på
 forklift = Motor(Port.A, positive_direction=Direction.CLOCKWISE, gears=[12, 36])
 line_sensor = ColorSensor(Port.S3)
 cruise_sensor = UltrasonicSensor(Port.S4)
+#cruise_sensor = InfraredSensor(Port.S4)
 robot = DriveBase(left_motor, right_motor, wheel_diameter=47, axle_track=128)
 touch_sensor = TouchSensor(Port.S1)
 #Variables
-stopping_distance = 300
-working_speed = 100
-move_speed = -50
 run_statement = True
 instructions = False
-circulation_color = Color.BLACK
-Start_color = Color.GREEN
+#Parameters
+maxdistance = 3.0 # May need to calibrate
+stopping_distance = 300
+working_speed = 100
+move_speed = -80
 
 ev3 = EV3Brick()
 
 def lift(up_down, angle):
+    '''Lifting up/down on angle'''
     ev3.light.on(Color.YELLOW)
-    ev3.screen.draw_text(40, 50, "Lifting")
-    #forklift.run_until_stalled(working_speed*up_down, then=Stop.HOLD, duty_limit=None)
+    msg("Lifting "+str(up_down))
     forklift.run_target(working_speed*up_down, angle, then=Stop.HOLD, wait=True)
     ev3.light.on(Color.GREEN)
-    ev3.screen.clear()
+    msg("Done")
     return True
 
 def lift_until_pressed():
-
+    '''Driving towars pallet until button is pressed'''
+    lift(-1, -5)
     right_motor.dc(-50)
     left_motor.dc(-50)
+    msg("Will try to lift")
     while(not touch_sensor.pressed()):
         wait(10)
     right_motor.dc(0)
     left_motor.dc(0)
-    lift(-1, 50)
+    lift(1, -50)
+    right_motor.dc(50)
+    left_motor.dc(50)
+    wait(2000)
+    right_motor.dc(0)
+    left_motor.dc(0)
+    msg("Done")
 def reset_clow():
-    ev3.screen.draw_text(40, 50, "Reseting clow")
-
+    '''Reseting claw'''
+    msg("Reseting claw")
     forklift.run_until_stalled(working_speed, then=Stop.COAST, duty_limit=None)
     forklift.reset_angle(0)
     ev3.screen.clear()
+
 def elevated_surface(direction):
+    '''Gathering pallet from elevated surface'''
+    lift(-1, -5)
     forklift.run_target(working_speed*direction, -67, then=Stop.HOLD, wait=True)
     left_motor.dc(-50)
     right_motor.dc(-50)
@@ -59,29 +73,57 @@ def elevated_surface(direction):
         wait (10)
     right_motor.dc(0)
     left_motor.dc(0)
-    lift(-1, -90)
+    lift(1, -90)
     right_motor.dc(50)
     left_motor.dc(50)
     wait(2000)
-    lift(1, -67)
+    lift(-1, -67)
+    right_motor.dc(0)
+    left_motor.dc(0)
 
-def follow_line(line_color):
-    '''This function will make the robot follow a selected line color'''
-    current_line = line_sensor.color()
-    if current_line != line_color:
-        right_motor.dc(-50)
-        left_motor.dc(25)
-        wait(15)
-#140 -5 < 145 > +5 150
-    else:
-        left_motor.dc(-50)
-        right_motor.dc(25)
-        wait(15)
+def detect_color(AvalibleColors):
+    '''Calculating color'''
+    currentRGB = line_sensor.rgb()
+    currentColor = " "
+    bestDistance = 0.0
+    for i in range(0, 3):
+        #print(AvalibleColors[list(AvalibleColors.keys())[0]][0])
+        r = AvalibleColors[list(AvalibleColors.keys())[i]][0] - currentRGB[0]
+        g = AvalibleColors[list(AvalibleColors.keys())[i]][1] - currentRGB[1]
+        b = AvalibleColors[list(AvalibleColors.keys())[i]][2] - currentRGB[2]
+        distance = math.sqrt(abs((r)^2 + (g)^2 + (b)^2))
+        if distance < maxdistance and distance < bestDistance or bestDistance == 0: # Giving the color detection some room
+            currentColor = list(AvalibleColors.keys())[i]
+            bestDistance = distance
+        else:
+            pass
+    return currentColor
+#
+def follow_line(line_color, backround):
+    '''Following line using reflection'''
+    turn_ration = 10.5
+    current_line = line_sensor.reflection()
+    perfect_line = (line_color + backround) / 2
+    robot.drive(move_speed, (perfect_line - current_line) * turn_ration)
 
-        left_motor.dc(-50)
-        right_motor.dc(-50)
 
-    return current_line
+# def follow_line(line_color):
+#     '''Following line using color'''
+#     current_line = line_sensor.color()
+#     if current_line != line_color:
+#         right_motor.dc(-50)
+#         left_motor.dc(25)
+#         wait(15)
+# #140 -5 < 145 > +5 150
+#     else:
+#         left_motor.dc(-50)
+#         right_motor.dc(25)
+#         wait(15)
+
+#         left_motor.dc(-50)
+#         right_motor.dc(-50)
+
+#     return current_line
 
 
 def user_controll():
@@ -94,10 +136,12 @@ def user_controll():
     return True
 
 def obstacle_distance():
+    '''Getting distace data'''
     return cruise_sensor.distance()
 
 def avoid_collison():
-    #robot.stop()
+    '''Stopping for object'''
+    robot.stop()
     left_motor.dc(0)
     right_motor.dc(0)
     ev3.light.on(Color.RED)
@@ -107,52 +151,109 @@ def avoid_collison():
     ev3.light.on(Color.GREEN)
 
 def paralysed():
-    #robot.stop()
+    '''Just freezing robot'''
+    robot.stop()
     left_motor.dc(0)
     right_motor.dc(0)
 def get_instructions():
-    '''Getting instructions'''
-    ev3.screen.clear()
-    #RondellButton.DOWN in ev3.buttons.pressed():
-    ev3.screen.draw_text(40, 50, "Choose 3 colors")
+    '''Getting instructions for the route'''
 
-    my_list = []
-    pressed = 0
-    while len(my_list) != 3:
+    msg("Choose 3 colors")
+    instructions = []
+
+    while len(instructions) != 3:
         if Button.DOWN in ev3.buttons.pressed():
-            my_list.append(line_sensor.color())
-            print(my_list)
+            instructions.append((line_sensor.rgb()[0], line_sensor.rgb()[1], line_sensor.rgb()[2], line_sensor.reflection()))
+            print(instructions)
             wait(1000)
 
-    print(my_list)
+    print(instructions)
     ev3.screen.clear()
-    return my_list #[Start_color, circulation_color, Color.BLUE]
+    return instructions
 
+def get_avalible_colors():
+    '''Gattering colors'''
+    #hej[list(hej.keys())[0]]
+    colors = ["Yellow", "BLUE", "PINK", "PURPLE", "Backround"]
+    colorsRGB = {}
+    msg(colors[0])
+    pressed = 0
+    while len(colorsRGB) != 5:
+
+
+        if Button.CENTER in ev3.buttons.pressed():
+            if len(colorsRGB) + 1 != 5:
+                msg(colors[len(colorsRGB)+ 1])
+            colorsRGB[colors[pressed]] = line_sensor.rgb()
+            wait(1000)
+            pressed = pressed + 1
+    return colorsRGB
+def timer(start_time, text):
+    '''Counter which displays'''
+    for i in range(start_time, 0, -1):
+        msg(text + str(i))
+        wait(1000)
+
+
+def msg(text):
+    '''Printer'''
+    ev3.screen.clear()
+    #fontSize = Font(24 - len(text) + 3)
+    #ev3.screen.set_font(size=6)
+    ev3.screen.draw_text(20, 50, text)
+
+def test():
+    '''Testing facility'''
+    msg("Resetig robot")
+    robot.reset()
+    reset_clow()
+    wait(1000)
+    timer(5, "test begins in ")
+    timer(5, "90 degree to right")
+    robot.turn(90)
+    timer(5, "90 degree to left")
+    robot.turn(-180)
+    timer(5, "lift test in ")
+
+    lift(1, -67)
+    timer(5, "elevated test in ")
+    elevated_surface(1)
+    timer(5, "ground test in ")
+    lift_until_pressed()
 if __name__ == "__main__":
+    '''MAIN FUNCTION'''
     #Variables in use
     current_step = 0
     instruction_list = []
+    avalible_colors = []
+    current_reflection = 3
     reset_clow()
-    #Workshop 2
-    #lift_until_pressed
-    #elevated_surface(-1)
-    while(run_statement):
+    current_color = None
+
+    while(run_statement): #Drive loop
 
 
         if obstacle_distance() < stopping_distance:
             avoid_collison()
-            pass
+
         if instructions == False:
             paralysed()
-            instruction_list = get_instructions()
+            #instruction_list = get_instructions()
+            avalible_colors = get_avalible_colors()
+            current_color = "YELLOW"
             instructions = True
 
-        else:
-            current_color = follow_line(instruction_list[current_step])
-            print(f"{current_color} {current_step}")
-            if current_color == instruction_list[current_step + 1]:
-                current_step = current_step + 1
-                if current_step == len(instruction_list)-1:
-                    current_step = 0
 
-                    instruction_list.reverse()
+        else:
+            current_color = detect_color(avalible_colors)
+            #follow_line(instruction_list[current_step][3], 22)
+            print(current_color)
+            # if current_color == instruction_list[current_step + 1]:
+            #     print("Changes color")
+            #     print(distance)
+            #     current_step = current_step + 1
+            #     #current_reflection = line_sensor.reflection()
+            #     if current_step == len(instruction_list)-1:
+            #         current_step = 0
+
+            #         instruction_list.reverse()
