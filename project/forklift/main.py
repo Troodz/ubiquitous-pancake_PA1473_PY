@@ -16,7 +16,7 @@ right_motor = Motor(Port.C)#ingen aning faktiskt vilken port som är vad jag hit
 forklift = Motor(Port.A, positive_direction=Direction.CLOCKWISE, gears=[12, 36])
 line_sensor = ColorSensor(Port.S3)
 cruise_sensor = UltrasonicSensor(Port.S4)
-#cruise_sensor = InfraredSensor(Port.S4)
+
 robot = DriveBase(left_motor, right_motor, wheel_diameter=47, axle_track=128)
 touch_sensor = TouchSensor(Port.S1)
 #Variables
@@ -81,49 +81,49 @@ def elevated_surface(direction):
     right_motor.dc(0)
     left_motor.dc(0)
 
-def detect_color(AvalibleColors):
-    '''Calculating color'''
-    currentRGB = line_sensor.rgb()
-    currentColor = " "
-    bestDistance = 0.0
-    for i in range(0, 3):
-        #print(AvalibleColors[list(AvalibleColors.keys())[0]][0])
-        r = AvalibleColors[list(AvalibleColors.keys())[i]][0] - currentRGB[0]
-        g = AvalibleColors[list(AvalibleColors.keys())[i]][1] - currentRGB[1]
-        b = AvalibleColors[list(AvalibleColors.keys())[i]][2] - currentRGB[2]
-        distance = math.sqrt(abs((r)^2 + (g)^2 + (b)^2))
-        if distance < maxdistance and distance < bestDistance or bestDistance == 0: # Giving the color detection some room
-            currentColor = list(AvalibleColors.keys())[i]
-            bestDistance = distance
-        else:
-            pass
-    return currentColor
+# def detect_color(AvalibleColors):
+#     '''Calculating color'''
+#     currentRGB = line_sensor.rgb()
+#     currentColor = " "
+#     bestDistance = 0.0
+#     for i in range(0, len(AvalibleColors)):
+#         #print(AvalibleColors[list(AvalibleColors.keys())[0]][0])
+#         r = AvalibleColors[list(AvalibleColors.keys())[i]][0] - currentRGB[0]
+#         g = AvalibleColors[list(AvalibleColors.keys())[i]][1] - currentRGB[1]
+#         b = AvalibleColors[list(AvalibleColors.keys())[i]][2] - currentRGB[2]
+#         distance = math.sqrt(abs((r)^2 + (g)^2 + (b)^2))
+#         if distance < maxdistance and distance < bestDistance or bestDistance == 0: # Giving the color detection some room
+#             currentColor = list(AvalibleColors.keys())[i]
+#             bestDistance = distance
+#         else:
+#             pass
+#     return currentColor
 #
-def follow_line(line_color, backround):
-    '''Following line using reflection'''
-    turn_ration = 10.5
-    current_line = line_sensor.reflection()
-    perfect_line = (line_color + backround) / 2
-    robot.drive(move_speed, (perfect_line - current_line) * turn_ration)
+# def follow_line(line_color, backround):
+#     '''Following line using reflection'''
+#     turn_ration = 10.5
+#     current_line = line_sensor.reflection()
+#     perfect_line = (line_color + backround) / 2
+#     robot.drive(move_speed, (perfect_line - current_line) * turn_ration)
 
 
-# def follow_line(line_color):
-#     '''Following line using color'''
-#     current_line = line_sensor.color()
-#     if current_line != line_color:
-#         right_motor.dc(-50)
-#         left_motor.dc(25)
-#         wait(15)
-# #140 -5 < 145 > +5 150
-#     else:
-#         left_motor.dc(-50)
-#         right_motor.dc(25)
-#         wait(15)
+def follow_line(line_color, avalible_colors):
+    '''Following line using color'''
+    current_line = get_current_color(avalible_colors)
+    if current_line != line_color:
+        right_motor.dc(-50)
+        left_motor.dc(25)
+        wait(15)
+#140 -5 < 145 > +5 150
+    else:
+        left_motor.dc(-50)
+        right_motor.dc(25)
+        wait(15)
 
-#         left_motor.dc(-50)
-#         right_motor.dc(-50)
+        #left_motor.dc(-50)
+        #right_motor.dc(-50)
 
-#     return current_line
+    return current_line
 
 
 def user_controll():
@@ -141,7 +141,7 @@ def obstacle_distance():
 
 def avoid_collison():
     '''Stopping for object'''
-    robot.stop()
+    robot.stop()A
     left_motor.dc(0)
     right_motor.dc(0)
     ev3.light.on(Color.RED)
@@ -170,12 +170,44 @@ def get_instructions():
     print(instructions)
     ev3.screen.clear()
     return instructions
+def calculate_RGB_HSV(color):
+    r, g, b = color[0] / 255.0, color[1] / 255.0, color[2] / 255.0
+ 
+    #Finding out which of the three rgb scales which is highest and which is lowest
+    currentMax = max(r, g, b)    
+    currentMin = min(r, g, b)    
+    diff = currentMax-currentMin       
+ 
+    
+    if currentMax == currentMin:
+        h = 0
+     
+    elif currentMax == r:
+        h = (60 * ((g - b) / diff) + 360) % 360
+ 
+   
+    elif currentMax == g:
+        h = (60 * ((b - r) / diff) + 120) % 360
+ 
+    elif currentMax == b:
+        h = (60 * ((r - g) / diff) + 240) % 360
+ 
+  
+    if currentMax == 0:
+        s = 0
+    else:
+        s = (diff / currentMax) * 100
+ 
+    v = currentMax * 100
+    return h, s, v
+
+ 
 
 def get_avalible_colors():
     '''Gattering colors'''
     #hej[list(hej.keys())[0]]
-    colors = ["Yellow", "BLUE", "PINK", "PURPLE", "Backround"]
-    colorsRGB = {}
+    colors = ["YELLOW", "BLUE", "PINK", "PURPLE", "BACKROUND"]
+    colorsRGB = []
     msg(colors[0])
     pressed = 0
     while len(colorsRGB) != 5:
@@ -184,9 +216,11 @@ def get_avalible_colors():
         if Button.CENTER in ev3.buttons.pressed():
             if len(colorsRGB) + 1 != 5:
                 msg(colors[len(colorsRGB)+ 1])
-            colorsRGB[colors[pressed]] = line_sensor.rgb()
+            colorsRGB.append([colors[pressed], sum(calculate_RGB_HSV(line_sensor.rgb()))])
+            
             wait(1000)
             pressed = pressed + 1
+  
     return colorsRGB
 def timer(start_time, text):
     '''Counter which displays'''
@@ -201,6 +235,18 @@ def msg(text):
     #fontSize = Font(24 - len(text) + 3)
     #ev3.screen.set_font(size=6)
     ev3.screen.draw_text(20, 50, text)
+
+def get_current_color(avalible):
+    SHSV = sum(calculate_RGB_HSV(line_sensor.rgb()))
+    old_diff = 0
+    #print(avalible[0][1])
+    for i in range(0, len(avalible)):
+        
+        difference = abs(SHSV - avalible[i][1])
+        if difference < old_diff or old_diff == 0:
+            current_color = avalible[i][0]
+            old_diff = difference
+    return current_color
 
 def test():
     '''Testing facility'''
@@ -233,27 +279,29 @@ if __name__ == "__main__":
     while(run_statement): #Drive loop
 
 
-        if obstacle_distance() < stopping_distance:
-            avoid_collison()
+        # if obstacle_distance() < stopping_distance:
+        #     avoid_collison()
 
         if instructions == False:
             paralysed()
             #instruction_list = get_instructions()
+            instruction_list = ["YELLOW", "BLUE", "PINK"]
             avalible_colors = get_avalible_colors()
             current_color = "YELLOW"
             instructions = True
 
 
         else:
-            current_color = detect_color(avalible_colors)
-            #follow_line(instruction_list[current_step][3], 22)
+           
+           
+            current_color = follow_line(instruction_list[current_step], avalible_colors)
             print(current_color)
-            # if current_color == instruction_list[current_step + 1]:
-            #     print("Changes color")
-            #     print(distance)
-            #     current_step = current_step + 1
-            #     #current_reflection = line_sensor.reflection()
-            #     if current_step == len(instruction_list)-1:
-            #         current_step = 0
+            if current_color == instruction_list[current_step + 1]:
+                print("Changes color")
+                
+                current_step = current_step + 1
+                #current_reflection = line_sensor.reflection()
+                if current_step == len(instruction_list)-1:
+                    current_step = 0
 
-            #         instruction_list.reverse()
+                    instruction_list.reverse()
