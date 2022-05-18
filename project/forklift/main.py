@@ -41,7 +41,7 @@ def lift(up_down, angle):
 
 def lift_until_pressed():
     '''Driving towars pallet until button is pressed'''
-    lift(-1, -5)
+    lift(-1, 10)
     right_motor.dc(-50)
     left_motor.dc(-50)
     msg("Will try to lift")
@@ -49,7 +49,7 @@ def lift_until_pressed():
         wait(10)
     right_motor.dc(0)
     left_motor.dc(0)
-    lift(1, -50)
+    lift(1, 50)
     right_motor.dc(50)
     left_motor.dc(50)
     wait(2000)
@@ -59,25 +59,25 @@ def lift_until_pressed():
 def reset_clow():
     '''Reseting claw'''
     msg("Reseting claw")
-    forklift.run_until_stalled(working_speed, then=Stop.COAST, duty_limit=None)
+    forklift.run_until_stalled(-working_speed, then=Stop.COAST, duty_limit=None)
     forklift.reset_angle(0)
     ev3.screen.clear()
 
 def elevated_surface(direction):
     '''Gathering pallet from elevated surface'''
-    lift(-1, -5)
-    forklift.run_target(working_speed*direction, -67, then=Stop.HOLD, wait=True)
+    #lift(-1, -5)
+    forklift.run_target(working_speed*direction, 67, then=Stop.HOLD, wait=True)
     left_motor.dc(-50)
     right_motor.dc(-50)
     while(not touch_sensor.pressed()):
         wait (10)
     right_motor.dc(0)
     left_motor.dc(0)
-    lift(1, -90)
+    lift(1, 90)
     right_motor.dc(50)
     left_motor.dc(50)
     wait(2000)
-    lift(-1, -67)
+    lift(1, 67)
     right_motor.dc(0)
     left_motor.dc(0)
 
@@ -141,7 +141,7 @@ def obstacle_distance():
 
 def avoid_collison():
     '''Stopping for object'''
-    robot.stop()A
+    robot.stop()
     left_motor.dc(0)
     right_motor.dc(0)
     ev3.light.on(Color.RED)
@@ -255,15 +255,15 @@ def test():
     reset_clow()
     wait(1000)
     timer(5, "test begins in ")
-    timer(5, "90 degree to right")
-    robot.turn(90)
     timer(5, "90 degree to left")
-    robot.turn(-180)
+    robot.turn(180)
+    timer(5, "90 degree to right")
+    robot.turn(-360)
     timer(5, "lift test in ")
-
-    lift(1, -67)
+    robot.stop()
+    lift(1, 67)
     timer(5, "elevated test in ")
-    elevated_surface(1)
+    elevated_surface(-1)
     timer(5, "ground test in ")
     lift_until_pressed()
 if __name__ == "__main__":
@@ -275,7 +275,7 @@ if __name__ == "__main__":
     current_reflection = 3
     reset_clow()
     current_color = None
-
+    test()
     while(run_statement): #Drive loop
 
 
