@@ -1,6 +1,7 @@
 #!/usr/bin/env pybricks-micropython
 #Libaries
 import math
+import time
 #EV3
 from pybricks.ev3devices import Motor, ColorSensor, UltrasonicSensor, TouchSensor, InfraredSensor
 from pybricks.parameters import Port, Direction, Button, Color, Stop
@@ -98,13 +99,13 @@ def elevated_surface(direction):
 #         else:
 #             pass
 #     return currentColor
-#
-# def follow_line(line_color, backround):
-#     '''Following line using reflection'''
-#     turn_ration = 10.5
-#     current_line = line_sensor.reflection()
-#     perfect_line = (line_color + backround) / 2
-#     robot.drive(move_speed, (perfect_line - current_line) * turn_ration)
+
+def follow_line2(line_color, backround):
+    '''Following line using reflection'''
+    turn_ration = 10.5
+    current_line = line_sensor.reflection()
+    perfect_line = (line_color + backround) / 2
+    robot.drive(move_speed, (perfect_line - current_line) * turn_ration)
 
 
 def follow_line(line_color, avalible_colors):
@@ -250,6 +251,40 @@ def get_current_color(avalible):
             current_color = avalible[i][0]
             old_diff = difference
     return current_color
+def panic():
+    '''Lifting up/down on angle'''
+    ev3.light.on(Color.YELLOW)
+    #msg("Lifting "+str(up_down))
+    while not touch_sensor.pressed():
+        left_motor.run(-100)
+        right_motor.run(-100)
+    else:
+        lifting_time = 0
+        while touch_sensor.pressed() and forklift.angle() < 60:
+            start = time.perf_counter()
+            forklift.run(25)
+            end = time.perf_counter()
+            lifting_time += (end - start)
+            ev3.light.on(Color.GREEN)
+        else:
+            backing_time = 0
+            if forklift.angle() > 50:
+                while backing_time < 1:
+                    start4 = time.perf_counter()
+                    ev3.light.on(Color.GREEN)
+                    left_motor.run(100)
+                    right_motor.run(100)
+                    end4 = time.perf_counter()
+                    backing_time += (end4 - start4)
+            else:
+                while backing_time < 1:
+                    start2 = time.perf_counter()
+                    ev3.light.on(Color.RED)
+                    forklift.run(-50)
+                    left_motor.run(100)
+                    right_motor.run(100)
+                    end2 = time.perf_counter()
+                    backing_time += (end2 - start2)
 
 def test():
     '''Testing facility'''
@@ -258,10 +293,6 @@ def test():
     reset_clow()
     wait(1000)
     timer(5, "test begins in ")
-    timer(5, "90 degree to left")
-    robot.turn(180)
-    timer(5, "90 degree to right")
-    robot.turn(-360)
     timer(5, "lift test in ")
     robot.stop()
     lift(1, 67)
@@ -276,14 +307,17 @@ if __name__ == "__main__":
     instruction_list = []
     avalible_colors = []
     current_reflection = 3
-    reset_clow()
+
     current_color = None
+    reset_clow()
     test()
+    #panic()
+    #lift(1, 67)
+   
     while(run_statement): #Drive loop
 
-
-        # if obstacle_distance() < stopping_distance:
-        #     avoid_collison()
+        if obstacle_distance() < stopping_distance:
+            avoid_collison()
 
         if instructions == False:
             paralysed()
@@ -292,6 +326,7 @@ if __name__ == "__main__":
             avalible_colors = get_avalible_colors()
             current_color = "YELLOW"
             instructions = True
+        
 
 
         else:
