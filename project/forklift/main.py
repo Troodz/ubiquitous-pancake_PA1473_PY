@@ -171,34 +171,37 @@ def get_instructions():
     ev3.screen.clear()
     return instructions
 def calculate_RGB_HSV(color):
-    r, g, b = color[0] / 255.0, color[1] / 255.0, color[2] / 255.0
- 
+    #Making the range for the color spectrum variate between 0 and 1
+    r = color[0] / 255.0
+    g = color[1] / 255.0
+    b = color[2] / 255.0
     #Finding out which of the three rgb scales which is highest and which is lowest
+    currentMin = min(r, g, b)   
     currentMax = max(r, g, b)    
-    currentMin = min(r, g, b)    
-    diff = currentMax-currentMin       
+    v = currentMax * 100
+    difference = currentMax-currentMin       
  
-    
+    #If tge differenc between the colors are the same then there is not a big coler difference and therfor hue is equal to zero
     if currentMax == currentMin:
         h = 0
-     
+    # Calculating HUE depending on which color had the highest value 
     elif currentMax == r:
-        h = (60 * ((g - b) / diff) + 360) % 360
+        h = (60 * ((g - b) / difference) + 360) % 360
  
    
     elif currentMax == g:
-        h = (60 * ((b - r) / diff) + 120) % 360
+        h = (60 * ((b - r) / difference) + 120) % 360
  
     elif currentMax == b:
-        h = (60 * ((r - g) / diff) + 240) % 360
+        h = (60 * ((r - g) / difference) + 240) % 360
  
-  
+    #Calculating Saturation which describes how much of a color is shown 
     if currentMax == 0:
         s = 0
     else:
-        s = (diff / currentMax) * 100
+        s = (difference / currentMax) * 100
  
-    v = currentMax * 100
+   
     return h, s, v
 
  
